@@ -11,30 +11,8 @@
             "id": "e2623082b50f2ddb",
             "type": "leaf",
             "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Processo di sviluppo.md",
-                "mode": "source",
-                "source": false
-              }
-            }
-          }
-        ]
-      },
-      {
-        "id": "af050ea2d13c0842",
-        "type": "tabs",
-        "children": [
-          {
-            "id": "e6ee66beef544cff",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Requisiti.md",
-                "mode": "source",
-                "source": false
-              }
+              "type": "graph",
+              "state": {}
             }
           }
         ]
@@ -103,7 +81,6 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Processo di sviluppo.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -120,7 +97,6 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Processo di sviluppo.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -142,9 +118,7 @@
             "type": "leaf",
             "state": {
               "type": "outline",
-              "state": {
-                "file": "Processo di sviluppo.md"
-              }
+              "state": {}
             }
           }
         ]
@@ -156,10 +130,11 @@
   },
   "active": "e2623082b50f2ddb",
   "lastOpenFiles": [
-    "Requisiti.md",
-    "Processo di sviluppo.md",
+    "Index.md",
     "Introduzione.md",
-    "index.md",
+    "Processo-di-sviluppo.md",
+    "Requisiti.md",
+    "processo.md",
     "README.md"
   ]
 }
