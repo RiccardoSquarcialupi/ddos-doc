@@ -3,3 +3,11 @@ plugins:
 - jekyll-remote-theme
 title: DDoS Framework
 description: Distrubed Devices over Scala
+include:
+ - Index.md
+ - Introduzione.md
+ - Processo-di-sviluppo.md
+ - Requisiti.md
+ - images/
+exclude:
+ - README.md

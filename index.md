@@ -10,9 +10,9 @@ Filippo Cavallari, Bruno Esposito, Andrea Ingargiola, Riccardo Squarcialupi
 
 ## Capitoli
 
-* [Introduzione](introduzione.md)
-* [Processo di sviluppo](processo-di-sviluppo.md)
-* [Requisiti](requisiti.md)
+* [Introduzione](Introduzione.md)
+* [Processo di sviluppo](Processo-di-sviluppo.md)
+* [Requisiti](Requisiti.md)
 * [Design architetturale]()
 * [Design di dettaglio]()
 * [Implementazione]()
