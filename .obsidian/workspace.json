@@ -1,0 +1,165 @@
+{
+  "main": {
+    "id": "599c3334d77e5a74",
+    "type": "split",
+    "children": [
+      {
+        "id": "f5f9383a7e238e81",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "e2623082b50f2ddb",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Processo di sviluppo.md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": "af050ea2d13c0842",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "e6ee66beef544cff",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Requisiti.md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "634d7be26414543b",
+    "type": "split",
+    "children": [
+      {
+        "id": "74dc5f628495b5b0",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "f5574a1d225c3dec",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical"
+              }
+            }
+          },
+          {
+            "id": "9ed750860a5bda69",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              }
+            }
+          },
+          {
+            "id": "8e193846c62ceed6",
+            "type": "leaf",
+            "state": {
+              "type": "starred",
+              "state": {}
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "19db97714a4b0866",
+    "type": "split",
+    "children": [
+      {
+        "id": "a7b6bed492534a66",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "dcc753e0021c44ea",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "Processo di sviluppo.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "4bf729e8bb9960ec",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "Processo di sviluppo.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "e39585a2e513e4d6",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true
+              }
+            }
+          },
+          {
+            "id": "328d4d2e34791128",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "Processo di sviluppo.md"
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "active": "e2623082b50f2ddb",
+  "lastOpenFiles": [
+    "Requisiti.md",
+    "Processo di sviluppo.md",
+    "Introduzione.md",
+    "index.md",
+    "README.md"
+  ]
+}
