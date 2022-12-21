@@ -192,7 +192,7 @@ def run(): Future[Http.ServerBinding] =
         TusowServiceHandler(tusowAkkaService)
 ```
 
-### Programmazione reattiva
+## Programmazione reattiva
 
 Usando la librearia akka.stream (non importata direttamente ma come dipendenza di akka.gRPC), ci si imbatte nel concetto di *stream*, ovvero di *flusso attivo in cui si spostano e modificano dati*[^1]. Usando la classe `Source` è possibile immettere dentro lo stream nuovi dati generando degli eventi ai quali, medianti dei *listener*, sarà possibile reagire. La gestione degli eventi viene auto-generata dai file *protobuf* usando il compilatore di Akka gRPC.
 
