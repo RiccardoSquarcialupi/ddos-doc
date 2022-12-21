@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Design-architetturale.md",
+                "file": "Index.md",
                 "mode": "source",
                 "source": false
               }
@@ -85,7 +85,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Design-architetturale.md",
+                "file": "Index.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -102,7 +102,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Design-architetturale.md",
+                "file": "Index.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -125,7 +125,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Design-architetturale.md"
+                "file": "Index.md"
               }
             }
           }
@@ -136,15 +136,26 @@
     "width": 300,
     "collapsed": true
   },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false
+    }
+  },
   "active": "4e8a3c636879068f",
   "lastOpenFiles": [
-    "Design-di-dettaglio.md",
-    "Design-architetturale.md",
-    "Processo-di-sviluppo.md",
-    "Introduzione.md",
+    "Implementazione.md",
     "Index.md",
-    "Requisiti.md",
+    "Design-di-dettaglio.md",
+    "Introduzione.md",
+    "Processo-di-sviluppo.md",
     "().md",
+    "Design-architetturale.md",
+    "Requisiti.md",
     "processo.md",
     "README.md"
   ]
