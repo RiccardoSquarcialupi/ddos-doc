@@ -40,7 +40,7 @@ message match
         Behaviors.same
 ```
 
-#### Higher-order functions
+## Higher-order functions
 
 Le higher-order functions sono un costrutto che permette di utilizzare funzioni come parametri di altre funzioni.
 
@@ -59,7 +59,7 @@ class ConditionalState[T](name: String, condFunction: (T, Seq[T]) => Boolean) ex
     }
 ```
 
-### Type alias
+## Type alias
 
 I type alias permettono di ridefinire una classe od un tipo con un altro nome. Molto utile per associare a delle higher-order functions un stringa più comprensibile.  
 Il frammento di codice precedente viene dunque riscritto nel seguente modo:
@@ -81,7 +81,7 @@ class ConditionalState[T](name: String, condFunction: ConditionalFunction[T]) ex
     }
 ```
 
-### Options
+## Options
 
 L'utilizzo di valori `null` è altamente sconsigliata e porta con alta probabilità a scrivere codice buggato. Per gestire la *null safety*, Scala mette a disposizione gli `Option`, strutture per incapsulare oggetti che possono assumere valori `null` a run-time.
 
@@ -94,7 +94,7 @@ def propagate(selfId: ActorRef[Message], requester: ActorRef[Message]): Unit =
     case None =>
 ```
 
-### Mixins
+## Mixins
 
 Utilizzando i mixins è possibile comporre classi senza utilizzare il meccanismo dell'ereditarietà.
 
@@ -113,7 +113,7 @@ trait Condition[A, B](condition: (A | B) => Boolean, replyTo: ActorRef[Message])
 new Actuator[String]("actuatorTest", fsm) with Condition[String, String]
 ```
 
-### Partial functions
+## Partial functions
 
 ```scala
 private def handleReadOrTakeRequest[A](in: ReadOrTakeRequest)(readOrTake: (TextualSpace, String, Long) => Future[A]): Future[A] = {  
@@ -122,8 +122,44 @@ private def handleReadOrTakeRequest[A](in: ReadOrTakeRequest)(readOrTake: (Textu
 }
 ```
 
+## Generics
 
-### Programmazione asincrona
+I generics sono uno strumento che permette di definire un tipo parametrizzato, che viene esplicitato successivamente in fase di compilazione secondo le necessità; i generics permettono di definire delle astrazioni sui tipi di dati definiti nel linguaggio.
+
+```scala
+object Graph:  
+  
+    def apply[T](): Graph[T] = new Graph[T](None, Map.empty)  
+  
+    def apply[T](edges: (T, T)*): Graph[T] =  
+        new Graph(edges.head.getFirst, edges.foldLeft(Map[T, List[T]]())((map, edge) => addEdge(map, edge)))
+
+case class Graph[T](private val initialNode: Option[T], private var edges: Map[T, List[T]]):
+
+[...]
+
+```
+
+## Symbolic methods
+
+In Scala è possibile utilizzare caratteri speciali per definire metodi e funzioni. Per poter garantire la compatibilità con altri linguaggi basati su JVM (e.g. Java, Kotlin), è possibile annotarli con l'annotazione `@targetName("alternative name")` il cui contenuto verrà utilizzato per rinominare il metodo in fase di compilazione.
+
+```scala
+@targetName("forEach")  
+def @-> (f: (T, List[T]) => Unit): Unit = edges foreach (x => f(x._1, x._2))
+
+@targetName("getEdgesOrElseEmptyList")  
+def ?-> (node: T): List[T] = edges.getOrElse(node, List.empty)
+
+@targetName("containsNode")  
+def ?(node: T): Boolean = edges.contains(node)  
+  
+@targetName("addEdge")  
+def ++(edge: (T, T)): Unit = edges = Graph.addEdge(edges, edge)
+```
+
+
+## Programmazione asincrona
 
 Mediante l'uso delle Future è possibile eseguire computazioni asincrone, ovvero delegandole ad entità terze (nell'esempio sottostante ad eseguire sarà l'`ExecutionContext` passato implicitamente).
 
@@ -143,7 +179,7 @@ def processReadOrTakeAllFutures[A](futures: Seq[CompletableFuture[A]])(result: A
     })
 ```
 
-### Implicits
+## Implicits
 
 I parametri impliciti sono i parametri definiti con la keyword `implicit`, ovvero i parametri che verranno passati alla funzione in basa al contesto in cui viene chiamata.
 

@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Index.md",
+                "file": "Implementazione.md",
                 "mode": "source",
                 "source": false
               }
@@ -85,7 +85,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Index.md",
+                "file": "Implementazione.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -102,7 +102,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Index.md",
+                "file": "Implementazione.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -125,7 +125,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Index.md"
+                "file": "Implementazione.md"
               }
             }
           }
@@ -148,10 +148,10 @@
   },
   "active": "4e8a3c636879068f",
   "lastOpenFiles": [
-    "Implementazione.md",
-    "Index.md",
-    "Design-di-dettaglio.md",
     "Introduzione.md",
+    "Index.md",
+    "Implementazione.md",
+    "Design-di-dettaglio.md",
     "Processo-di-sviluppo.md",
     "().md",
     "Design-architetturale.md",
