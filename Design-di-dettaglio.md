@@ -165,3 +165,9 @@ Nello specifico le procedure sono:
 ### Integrazione con Akka gRPC
 
 Lo sviluppo ha richiesto di scrivere l'implementazione delle *remote procedure* in Scala in modo che potessero essere incapsulate all'interno di un attore di Akka.
+
+## Struttura del progetto
+
+La struttura dei package del progetto è la seguente:
+
+![Packages UML](https://i.imgur.com/mNbgaZ7.png)
