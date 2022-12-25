@@ -1,13 +1,79 @@
 In questo capitolo verrà analizzata in maniera dettagliata la struttura del framework, andando a descrivere i singoli componenti e le relazioni fra di essi.
 
+## Pattern utilizzati
+
+### Pimp my library
+
+Il pattern *pimp my library* è un pattern che permette di aggiungere nuovi metodi ad una classe senza modificarne il codice sorgente; è particolarmente utile quando si utilizzano librerie terze o classi della standard library di Scala e Java. È stato utilizzato, per esempio, per aggiungere due metodi, `getFirst` e `getSecond`, alla classe `Tuple` di Scala, in modo da restituire un `Option` per gestire valori `null`.
+
+```scala
+extension [T](t: (T, T))  
+    def getFirst: Option[T] = if(t != null && t._1 != null) Some(t._1) else None  
+    def getSecond: Option[T] = if(t != null && t._2 != null) Some(t._2) else None
+```
+
+### Strategy
+
+Il meccanismo delle higher-order functions permette di utilizzare in modo triviale il pattern strategy; si potrebbe infattire dire che il pattern strategy è già implementato all'interno di Scala.  
+Un esempio di utilizzo è nei ConditionalState in cui il comportamento dello stato viene fornito nel costruttore utilizzando per l'appunto una higher-order function.
+
+```scala
+type ConditionalFunction[T] = (T, Seq[T]) => Boolean  
+  
+object ConditionalState {  
+    def apply[T](name: String, condFunc: ConditionalFunction[T]): ConditionalState[T] = new ConditionalState[T](name, condFunc)  
+}
+
+class ConditionalState[T](name: String, condFunction: ConditionalFunction[T]) extends State[T](name):
+
+[...] //other code
+```
+
+### Singleton
+
+Proprio come il pattern *strategy*, anche il pattern *singleton* è supportato direttamente da Scala.
+Poichè il pattern singleton prevede l'esistenza di una sola istanza di una data classe, è sufficiente utilizzare gli `object`. Un esempio di singleton è l'oggetto `Deployer` (mostrati solo i metodi pubblici):
+
+```scala
+object Deployer:  
+  
+  def initSeedNodes(): Unit =  
+    ActorSystem(Behaviors.empty, "ClusterSystem", setupClusterConfig("2551"))  
+    ActorSystem(Behaviors.empty, "ClusterSystem", setupClusterConfig("2552"))  
+      
+  def addNodes(numberOfNode: Int): Unit =  
+    for (i <- 1 to numberOfNode)  
+        val as = createActorSystem("ClusterSystem")  
+        Thread.sleep(300)  
+        orderedActorSystemRefList += ActorSysWithActor(as, 0)  
+  
+  def deploy[T](devicesGraph: Graph[Device[T]]): Unit =  
+    val alreadyDeployed = mutable.Set[Device[T]]()  
+    devicesGraph @-> ((k,edges) => {  
+      if(!alreadyDeployed.contains(k)) deploy(k)  
+      edges.filter(!alreadyDeployed.contains(_)).foreach(deploy(_))  
+    })  
+    devicesGraph @-> ((k, v) => v.map(it => devicesActorRefMap.get(it.id)).filter(_.isDefined).foreach(device => devicesActorRefMap(k.id).ref ! Subscribe(device.get.ref)))  
+  
+```
+
 ## Package: Device
 
 ### Attuatore
 
 ![Actuator UML](https://i.imgur.com/Ybv1jdD.png)
 
-La classe `Actuator` è un'implementazione del *trait* `Device`. 
+La classe `Actuator` è un'implementazione del *trait* `Device`. Come tale può venir istanziato con tutti i mixin disponibili per il `trait Device`, ad esempio `Public`.
+```scala
+new Actuator[String]("actuatorTest", fsm) with Public[String]
+```
+Un attuatore può, in base al dispositivo fisico che rappresenta e quindi ad eventi esterni, avere stati differenti; questi stati vengono forniti al costruttore tramite una macchina a stati finiti (classe `FSM`): ogni stato della macchina è un'implementazione del trait `State` ed i pesi degli archi sono i messaggi (ovvero gli eventi) che causano un cambiamento di stato. Ad esempio, si prende come ipotesi l'aver fornito una FSM all'attuatore come quella nell'immagine sottostante:
 
+![FSM di esempio](https://i.imgur.com/WJTiX1A.png)
+
+Se l'attuatore si trovasse nello stato **A** e ricevesse un messaggio *GoTo("B")* allora potrebbe spostarsi nello stato **B**, ma se ricevesse un messaggio *GoTo("D")*, poichè esso non è definito nella FSM, il cambio di stato non verrebbe effettuato.  
+In questo scenario abbiamo utilizzato degli stati privi di comportamenti, ovvero dei `BasicState`, tuttavia è possibile utilizzare stati il cui cambiamento è legato a condizioni sull'evento (`ConditionalState`) oppure a dei timer periodici (`TimedState`).
+Per un uniformare i messaggi scambiati fra i vari attori sia è creato il trait `Message` con varie case class che lo implementano, ad esempio `case class Approved() extends Message`; poichè è necessario che gli utilizzatori finali del framework possano inviare qualunque tipo di oggetto, sono stati creati messaggi che possono incapuslare qualunque tipo utilizzando i generics; ne è un esempio il messaggio `case class MessageWithReply[T](message: T, replyTo: ActorRef[Message], args: T*) extends Message`.
 
 ## Package: Storage
 
