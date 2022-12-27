@@ -73,6 +73,7 @@ Un attuatore può, in base al dispositivo fisico che rappresenta e quindi ad eve
 
 Se l'attuatore si trovasse nello stato **A** e ricevesse un messaggio *GoTo("B")* allora potrebbe spostarsi nello stato **B**, ma se ricevesse un messaggio *GoTo("D")*, poichè esso non è definito nella FSM, il cambio di stato non verrebbe effettuato.  
 In questo scenario abbiamo utilizzato degli stati privi di comportamenti, ovvero dei `BasicState`, tuttavia è possibile utilizzare stati il cui cambiamento è legato a condizioni sull'evento (`ConditionalState`) oppure a dei timer periodici (`TimedState`).
+Poichè l'attuatore è un `Device`, maschera al suo interno il `Behavior` di un attore tipizzato di *Akka*; lo scambio dei messaggi e il cambiamento di stato costituiscono infatti il `Behavior` restituito dal metodo `getBehavior` che verrà utilizzato per spawnare l'attuatore all'interno del *cluster*.
 Per un uniformare i messaggi scambiati fra i vari attori sia è creato il trait `Message` con varie case class che lo implementano, ad esempio `case class Approved() extends Message`; poichè è necessario che gli utilizzatori finali del framework possano inviare qualunque tipo di oggetto, sono stati creati messaggi che possono incapuslare qualunque tipo utilizzando i generics; ne è un esempio il messaggio `case class MessageWithReply[T](message: T, replyTo: ActorRef[Message], args: T*) extends Message`.
 
 ## Package: Storage
@@ -165,6 +166,13 @@ Nello specifico le procedure sono:
 ### Integrazione con Akka gRPC
 
 Lo sviluppo ha richiesto di scrivere l'implementazione delle *remote procedure* in Scala in modo che potessero essere incapsulate all'interno di un attore di Akka.
+
+![Storage package classes UML](https://i.imgur.com/NUnF8wt.png)
+
+Il trait `TusowService` è l'interfaccia generata dallo schema protobuf, la quale viene implementata dalla classe `TusowAkkaService`; quest'ultima filtra le richieste in base alla tipologia di *tuple space* e delega l'elaborazione alle classi `TusowAkkaTextualHandler` (in caso di tuple space testuali) e `TusowAkkaLogicHandler` (in caso di tuple space logici).  
+La classe `TusowServer` si occupa di invece di spawnare un nuovo nodo da aggiungere al cluster predefinito; questo nodo avrà come figlio un attore non tipizzato di *Akka* il cui *behavior* è dato da una nuova istanza di `TusowAkkaService`.  
+In questo modo gli attori del cluster possono chiamare le *procedure* di Tusow interagendo col neonato attore.  
+
 
 ## Struttura del progetto
 
