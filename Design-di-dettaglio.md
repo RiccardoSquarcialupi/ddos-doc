@@ -76,6 +76,35 @@ In questo scenario abbiamo utilizzato degli stati privi di comportamenti, ovvero
 Poichè l'attuatore è un `Device`, maschera al suo interno il `Behavior` di un attore tipizzato di *Akka*; lo scambio dei messaggi e il cambiamento di stato costituiscono infatti il `Behavior` restituito dal metodo `getBehavior` che verrà utilizzato per spawnare l'attuatore all'interno del *cluster*.
 Per un uniformare i messaggi scambiati fra i vari attori sia è creato il trait `Message` con varie case class che lo implementano, ad esempio `case class Approved() extends Message`; poichè è necessario che gli utilizzatori finali del framework possano inviare qualunque tipo di oggetto, sono stati creati messaggi che possono incapuslare qualunque tipo utilizzando i generics; ne è un esempio il messaggio `case class MessageWithReply[T](message: T, replyTo: ActorRef[Message], args: T*) extends Message`.
 
+
+## Package: Deployment
+
+### Graph
+
+La classe `Graph` è una struttura dati usata per costruire grafi orientati non pesati.  
+Il metodo `apply` è stato pensato per semplificare notevolmente la costruzione di un grafo sfruttando la sintassi delle tuple 2D.
+
+```scala
+Graph[String](  
+   "A" -> "B",  
+   "A" -> "C",  
+   "B" -> "D",  
+   "C" -> "D",  
+   "D" -> "A"  
+)
+```
+
+Queste coppie di tuple vengono poi raggruppate usando come chiave il primo elemento della tupla, inserendo i secondi elementi in una lista. Si ricava quindi una mappa [K, List[K]] che associa ad un nodo tutti i nodi raggiungibili da esso; poichè il grafo è non pesato, utilizzare una struttura dati per gli archi era superfluo.
+
+Fra i metodi messi a disposizione i più utili sono `@->`, il quale si comporta come un for-each per ogny *entry* della mappa, `?` che verifica l'esistenza di un nodo e `?->` che fornisce la lista dei nodi raggiungibili da un altro nodo (lista vuoto in caso non ci siano archi).
+
+### Deployer
+
+Il *singleton* `Deployer` è l'oggetto centrale del package *deployment*. Esso permette di inizializzare un cluster spawnando i due *seed nodes* definiti a livello di configurazione utilizzando il metodo `initSeedNodes()`; in seguito è possibile aggiungere nuovi nodi al cluster utilizzando il metodo `addNodes(amountOfNodesToSpawn: Int)` (i vari nodi riceveranno una porta casuale fra quelle disponibili).  
+La scelta di dover inizializzare manualmente i nodi del cluster è stata effettuata poichè si riteneva, in linea coi requisiti, dare il maggior controllo possibile agli utilizzatori del framework pur mascherando la complessità di Akka sottostante.  
+
+Il metodo `deploy[T](devices: Device[T]*)` è invece il metodo che, preso uno o più `Device` (*varargs*), gli spawna come figli dei vari nodi del cluster distribuendoli in modo che ogni nodo abbia lo stesso numero di figli (*load balancing*); tale metodo è però privato, poichè per spawnare i dispositivi si utilizza un metodo omonomo ma con signature diversa: `deploy[T](devicesGraph: Graph[Device[T]])`. Usando un grafo di `Device` è possibile sia spawnare i vari dispositivi, sia definire le relazioni di publish/subscribe fra di essi; questo layer di astrazione aggiuntivo rende più facile il deploy su larga scala di molti dispotivi.
+
 ## Package: Storage
 
 ![TuSoW packages map](https://raw.githubusercontent.com/Filocava99/TuSoW/master/project-map.svg)
