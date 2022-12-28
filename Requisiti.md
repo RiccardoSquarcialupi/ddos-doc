@@ -24,14 +24,26 @@ Di seguito sono riportati i requisiti visti nell'ottica di cosa può fare l'uten
 
 Di seguito sono riportati i requisiti individuati durante lo studio del dominio e le regole scelte per la sua rappresentazione.
 
+#### Dispositivi
+-   I dispositivi si possono creare non temporizzati o temporizzati (usando il modulo `Timer`) e/o con la funzione di invio di ogni nuovo valore rilevato in broadcast a tutti gli altri dispositivi (usando il modulo `Public`);
+-   I dispositivi inviano in broadcast ad alcuni dispositivi il nuovo valore rilevato; 
+-   I dispositivi temporizzati ad ogni `Tick` inviano in broadcast ad alcuni dispositivi il nuovo valore rilevato;
+-   I dispositivi pubblici inviano in broadcast a tutti gli altri dispositivi il nuovo valore rilevato;
+-   I dispositivi temporizzati pubblici ad ogni `Tick` inviano in broadcast a tutti gli altri dispositivi il nuovo valore rilevato.
 
--   I dispositivi si possono creare non temporizzati o temporizzati (usando il modulo `Timer`) e/o con la funzione di invio di ogni nuovo valore rilevato in broadcast a tutti gli altri sensori (usando il modulo `Public`);
--   I dispositivi //TODO
--   I dispositivi temporizzati ad ogni `Tick` inviano in broadcast il nuovo valore rilevato, ma solo ad alcuni dispositivi;
--   I dispositivi publici //TODO
--   I dispositivi temporizzati pubblici //TODO
--   I sensori sono dei dispositivi che si possono creare con i moduli di `Device` e/o con il modulo `Condition`, oppure senza alcun modulo;
--   //TODO
+#### Sensori
+-   I sensori sono dispositivi in grado di effettuare una pre-elaborazione del dato - prima di inviarlo ad altri sensori e/o di memorizzarlo - e di aggiornare il proprio stato con l'ultimo valore rilevato;
+-   I sensori sono dispositivi che si possono creare con i moduli di `Device` (`Timer` e `Public`) e/o con il modulo `Condition`, oppure senza alcun modulo;
+-   I sensori `Condition` inviano il proprio stato dopo averlo aggiornato se e solo se si verifica una determinata condizione specificata dall'utente;
+-   Il `BasicSensor` è un sensore concreto che effettua una pre-elaborazione di base del dato;
+-   Il `ProcessedDataSensor` è un sensore concreto che effettua una qualsiasi pre-elaborazione del dato specificata direttamente dall'utente.
+
+#### Attuatori //TODO
+
+#### Zone //TODO
+
+#### Deploy //TODO
+
 
 ### Requisiti non Funzionali
 
