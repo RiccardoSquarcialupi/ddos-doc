@@ -49,8 +49,8 @@ Di seguito sono riportati i requisiti individuati durante lo studio del dominio 
 
 Di seguito sono descritti i requisiti non funzionali dell'applicativo:
 
--   _**Usabilità**_: //TODO
--   _**User Experience**_: //TODO
+-   _**Usabilità**_: interfaccia grafica intuitiva in modo tale che anche l'utente non esperto del dominio riesca a comprendere lo stato dei dispositivi e delle zone a livello distribuito;
+-   _**User Experience**_: interfaccia grafica reattiva per cui agli eventi che si verificano nel tempo devono corrispondere degli aggiornamenti molto rapidi dell'interfaccia (es. µs, ms, s);
 -   _**Cross Platform**_: Sarà possibile eseguire il sistema sui 3 principali sistemi operativi: Linux, Windows, MacOs.
 
 ### Requisiti di implementazione
