@@ -4,16 +4,16 @@
     "type": "split",
     "children": [
       {
-        "id": "28b02963e000d133",
+        "id": "d957f004c70f972a",
         "type": "tabs",
         "children": [
           {
-            "id": "4e8a3c636879068f",
+            "id": "cb9577f57466969f",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Design-di-dettaglio.md",
+                "file": "Requisiti.md",
                 "mode": "source",
                 "source": false
               }
@@ -85,7 +85,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Design-di-dettaglio.md",
+                "file": "Requisiti.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -102,7 +102,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Design-di-dettaglio.md",
+                "file": "Requisiti.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -125,7 +125,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Design-di-dettaglio.md"
+                "file": "Requisiti.md"
               }
             }
           }
@@ -146,17 +146,17 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "4e8a3c636879068f",
+  "active": "cb9577f57466969f",
   "lastOpenFiles": [
-    "Implementazione.md",
-    "Design-di-dettaglio.md",
-    "Design-architetturale.md",
     "Processo-di-sviluppo.md",
-    "Untitled.canvas",
-    "2022-12-22.md",
-    "Introduzione.md",
-    "Index.md",
-    "().md",
-    "Requisiti.md"
+    "images/git-tree.png",
+    "images/epic.png",
+    "images/backlog.png",
+    "images/board.png",
+    "images/branches.png",
+    "Requisiti.md",
+    "Sviluppi-futuri.md",
+    "Design-di-dettaglio.md",
+    "Implementazione.md"
   ]
 }

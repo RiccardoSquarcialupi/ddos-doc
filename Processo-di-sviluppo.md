@@ -38,6 +38,12 @@ Il branch `development` è il branch che contiene tutto il codice in via di svil
 Per ogni ticket viene creato un branch a partire da `development`, chiamato `feature/ID-DEL-TICKET-JIRA` (e.g. `feature/PPS-5`), il quale verrà *mergiato* sul branch padre al termine dello sviluppo (creazione dei test compresa).  
 In caso di bug non riscontrati tramite gli unit test, è possibile creare un branch da `development` chiamato `bugfix/ID-DEL-TICKET-BUG` al quale andranno applicate le stesse regole dei branch `feature/*`.  
 
+![Branches](git-tree.png)
+
+## Commits conventions
+
+Ogni commit deve iniziare con l'ID del ticket di Jira, in modo che su Bitbucket avvenga automaticamente il linking fra il commit e il ticket; subito dopo bisogna indicare il contenuto del ticket utilizzando la sintassi `#comment <messaggio>`; facoltativamente si può far avanzare il ticket alla colonna successiva utilizzando la sintassi `#in-progress` / `#to-be-tested` / `#completed`.
+
 ## Test automation
 
 ![Pipeline di BitBucket](./images/pipeline.png)
