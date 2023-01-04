@@ -107,20 +107,22 @@ Il metodo `deploy[T](devices: Device[T]*)` è invece il metodo che, preso uno o 
 
 ## Package: Grouping
 
-Il modulo Grouping mette a disposizione un tipo particolare di device che permette di definire funzioni higher-order di aggregazione tra output di device diversi. Un gruppo è formato da due componenti principali: l'attore che definisce il behavior akka utilizzato per la gestione degli input e un'istanza che implementa la classe astratta Group che ne definisce lo stato.
+Il modulo Grouping mette a disposizione un tipo particolare di device che permette di definire funzioni higher-order di aggregazione tra output di device diversi. Un gruppo è formato da due componenti principali: l'attore che definisce il behavior akka utilizzato per la gestione dei messaggi e un'istanza che implementa la classe astratta Group che ne definisce lo stato.
 
 ![[PPS-Grouping.png]]
 
 ### GroupActor
 Il trait `GroupActor` definisce il behavior Akka del gruppo, ovvero come l'attore reagisce ai vari messaggi che può ricevere. L'attore è stato pensato come macchina a stati finiti composta da due stati: `connecting` e `active`. Per cercare di aderire a uno stile di programmazione puramente funzionale questi due stati sono stati implementati come funzioni ricorsive pure che restituiscono un Behavior akka.
-Alla creazione dell'attore, l'oggetto scala che implementa `GroupActor` creerà una copia dell'istanza di `Group` con cui è stata invocata l'`apply()` e ne utilizzerà il campo `sources` per definire la lista di `Device` a cui sottoscriversi e da cui aspettarsi il `SubscribeAck`, passando allo stato `connecting()`.
+Alla creazione dell'attore, l'oggetto scala che implementa `GroupActor` crea una copia dell'istanza di `Group` con cui è stata invocata l'`apply()` e ne utilizza il campo `sources` per definire la lista di `Device` a cui sottoscriversi e da cui aspettarsi il `SubscribeAck`, passando allo stato `connecting()`.
 In questo stato l'attore rimane in attesa di aver collezionato il `SubscribeAck` di tutta la lista di sorgenti, mandando nuovamente il messaggio di `Subscribe` dopo un certo intervallo di tempo grazie al messaggio di `Timeout` che l'attore si invia attraverso un timer interno.
-Una volta collezionati tutti gli ack, l'attore passa allo stato `active()`, in cui rimane in attesa degli status delle varie sorgenti.
+Una volta collezionati tutti gli ack, l'attore passa allo stato `active()`, in cui rimane in attesa dei dati delle varie sorgenti.
 
 Tramite l'override di `getTriggerBehavior()`, che restituisce la logica di innesco della computazione, sono stati implementati due possibili comportamenti per questo stato: bloccante e non bloccante.
 L'attore bloccante (`BlockingGroup`) attenderà che tutte le sorgenti abbiano mandato almeno una volta il proprio status (eventualmente sovrascrivendo man mano lo status riportato da una sorgente nel caso questa lo mandasse più volte) prima di richiamare la computazione dell'output.
 Al contrario, `NonBlockingGroup` effettuerà la computazione a ogni ricezione di un nuovo status, sia da sorgenti che l'avevano già inviato che da quelle da cui lo sta ricevendo per la prima volta.
 
+Essendo il gruppo stesso un Device, esiste il caso in cui più gruppi siano innestati uno dentro l'altro, creando un potenziale conflitto di semantica tra il tipo T di `Device[T]` e il tipo di output del gruppo, che in certi casi potrebbe consistere in una `List[T]`. Per rendere trasparente all'utente la struttura dati usata per collezionare output multipli, e per poter trattare allo stesso modo gruppi, sensori e attuatori, ogni messaggio di tipo `Status[T]` viene inoltrato dall'attore a sé stesso come messaggio di tipo `Statuses[T]`, simile per concezione a uno `Status[List[T]]` ma, in questo caso, contenente un solo elemento.
+In questo modo le sorgenti che mandano messaggi di tipo `Status[T]` (sensori e attuatori) vengono processate allo stesso modo di quelle che mandano messaggi di tipo `Statuses[T]`, mantenendo la giusta semantica del tipo T, e cioè il tipo di dato rilevato dal sensore/elaborato dal gruppo.
 
 ### Group
 La classe astratta `Group` e le sue implementazioni costituiscono il nucleo della configurazione del gruppo di lavoro. Al suo interno sono presenti sia i campi per la conservazione degli input da trattare, che la funzione higher order definita dall'utente in fase di creazione per trattarli.
