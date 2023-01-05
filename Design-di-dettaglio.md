@@ -109,7 +109,7 @@ Il metodo `deploy[T](devices: Device[T]*)` è invece il metodo che, preso uno o 
 
 Il modulo Grouping mette a disposizione un tipo particolare di device che permette di definire funzioni higher-order di aggregazione tra output di device diversi. Un gruppo è formato da due componenti principali: l'attore che definisce il behavior akka utilizzato per la gestione dei messaggi e un'istanza che implementa la classe astratta Group che ne definisce lo stato.
 
-![[PPS-Grouping.png]]
+![](PPS-Grouping.png)
 
 ### GroupActor
 Il trait `GroupActor` definisce il behavior Akka del gruppo, ovvero come l'attore reagisce ai vari messaggi che può ricevere. L'attore è stato pensato come macchina a stati finiti composta da due stati: `connecting` e `active`. Per cercare di aderire a uno stile di programmazione puramente funzionale questi due stati sono stati implementati come funzioni ricorsive pure che restituiscono un Behavior akka.
@@ -125,7 +125,22 @@ Essendo il gruppo stesso un Device, esiste il caso in cui più gruppi siano inne
 In questo modo le sorgenti che mandano messaggi di tipo `Status[T]` (sensori e attuatori) vengono processate allo stesso modo di quelle che mandano messaggi di tipo `Statuses[T]`, mantenendo la giusta semantica del tipo T, e cioè il tipo di dato rilevato dal sensore/elaborato dal gruppo.
 
 ### Group
-La classe astratta `Group` e le sue implementazioni costituiscono il nucleo della configurazione del gruppo di lavoro. Al suo interno sono presenti sia i campi per la conservazione degli input da trattare, che la funzione higher order definita dall'utente in fase di creazione per trattarli.
+La classe astratta `Group[I,O]` e le sue implementazioni costituiscono il nucleo della configurazione del gruppo di lavoro. Al suo interno sono presenti sia i campi per la conservazione degli input da trattare, che la funzione higher order definita dall'utente in fase di creazione per trattarli.
+Una sua istanza rappresenta lo stato dell'attore, che ne richiama i metodi in risposta ai messaggi che riceve.
+In particolare, `insert(author: Actor, newValues: List[I])` viene richiamato per inserire nella mappa sorgente -> valori il nuovo valore ricevuto con un messaggio di tipo `Statuses[I]`
+La struttura dati usata per il salvataggio dei dati è una `Map[Actor, List[I]]`, con `Actor` type alias di `ActorRef[Message]`, rendendo quindi banale sovrascrivere i dati in caso di ricezione di più status nel tempo da parte di una sorgente.
+Il metodo `compute()` viene richiamato dall'attore nel momento in cui sono state soddisfatte le condizioni di innesco ("sono stati collezionati gli input di tutte le sorgenti" nella versione bloccante o "è arrivato un messaggio contenente un input" in quella non bloccante) e il suo compito è essenzialmente quello di calcolare l'output del gruppo, impostandolo come status (cioè il campo ereditato da `Device`) e, a seconda dell'implementazione, resettare la mappa dei valori parziali.
+Questo è il metodo di cui le due implementazioni fornite con la libreria fanno l'override:
+* ReduceGroup applica tramite una `foldLeft` la funzione di riduzione `f: I => O` su tutta la lista di liste appiattita contentente tutti i valori di input, producendo un singolo valore di output.
+* MapGroup esegue l'override di `Group` tramite un mixin con il trait `MultipleOutput`, che sovrascrive il metodo `propagate()` di `Device` per fare in modo che venga inviato un messaggio di tipo `Statuses[T]` invece che `Status[T]`. Questo perché il MapGroup non fa altro che applicare la funzione di mapping `f: I => O` a ogni elemento della lista di liste appiattita tramite una for comprehension, restituendo in uscita una lista con un numero di elementi variabile ma comunque dipendente in parte dal numero degli elementi processati (e non fissato a uno come nel caso del  `ReduceGroup`).
+
+### Sub-package: Tagging
+Questo sottopackacge rappresenta un'estensione del package `grouping` che consente all'utente di inizializzare gruppi di lavoro con un domain specific language, utilizzando i metodi di deployment messi a disposizione dal modulo apposito. I gruppi di base infatti richiedono una creazione degli oggetti potenzialmente molto verbosa che mal si adatta agli obbiettivi di user experience prefissati per la libreria. Per inizializzare gruppi di lavoro senza l'ausilio di questo sottomodulo è infatti necessario possedere già alla creazione del gruppo tutte le `ActorRef` delle sorgenti che fanno parte di quel gruppo. Essendo possibile innestare gruppi uno dentro l'altro, questo requisito rischia di rendere la creazione di sistemi complessi inutilmente articolata.
+Per questo motivo in questo modulo è stato fatto largo uso del pattern Factory, attraverso cui vengono generate delle istanze di `Group` rendendo trasparente all'utente l'ordine di generazione dei dispositivi sul cluster.
+Essendo un domain-specific language creato per effettuare il deployment di quanto già presente nel modulo di grouping, è inevitabilmente legato alle classi e alle implementazioni lì presenti, lasciando all'utente l'onere di estendere nel modo giusto anche questo modulo in caso abbia esteso in qualche modo `grouping`.
+
+![](PPS-Tagging.png)
+
 
 
 ## Package: Storage
