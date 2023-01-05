@@ -61,7 +61,7 @@ object Deployer:
 
 ### Attuatore
 
-![Actuator UML](https://i.imgur.com/Ybv1jdD.png)
+![Actuator UML](https://i.imgur.com/NHrWmrB.png)
 
 La classe `Actuator` è un'implementazione del *trait* `Device`. Come tale può venir istanziato con tutti i mixin disponibili per il `trait Device`, ad esempio `Public`.
 ```scala
@@ -219,15 +219,16 @@ Nello specifico le procedure sono:
 
 Lo sviluppo ha richiesto di scrivere l'implementazione delle *remote procedure* in Scala in modo che potessero essere incapsulate all'interno di un attore di Akka.
 
-![Storage package classes UML](https://i.imgur.com/NUnF8wt.png)
+![Storage package classes UML](https://i.imgur.com/otYr8Ua.png)
 
 Il trait `TusowService` è l'interfaccia generata dallo schema protobuf, la quale viene implementata dalla classe `TusowAkkaService`; quest'ultima filtra le richieste in base alla tipologia di *tuple space* e delega l'elaborazione alle classi `TusowAkkaTextualHandler` (in caso di tuple space testuali) e `TusowAkkaLogicHandler` (in caso di tuple space logici).  
 La classe `TusowServer` si occupa di invece di spawnare un nuovo nodo da aggiungere al cluster predefinito; questo nodo avrà come figlio un attore non tipizzato di *Akka* il cui *behavior* è dato da una nuova istanza di `TusowAkkaService`.  
 In questo modo gli attori del cluster possono chiamare le *procedure* di Tusow interagendo col neonato attore.  
 
+![Sequence diagram of TuSoW](https://i.imgur.com/82MH7vr.png)
 
 ## Struttura del progetto
 
 La struttura dei package del progetto è la seguente:
 
-![Packages UML](https://i.imgur.com/mNbgaZ7.png)
+![Packages UML](https://i.imgur.com/YOS8yNq.png)
