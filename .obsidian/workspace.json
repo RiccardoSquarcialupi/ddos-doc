@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Guida-utente.md",
+                "file": "Implementazione.md",
                 "mode": "source",
                 "source": false
               }
@@ -85,7 +85,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Guida-utente.md",
+                "file": "Implementazione.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -102,7 +102,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Guida-utente.md",
+                "file": "Implementazione.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -125,7 +125,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Guida-utente.md"
+                "file": "Implementazione.md"
               }
             }
           }
@@ -148,15 +148,15 @@
   },
   "active": "cb9577f57466969f",
   "lastOpenFiles": [
+    "Design-di-dettaglio.md",
+    "Implementazione.md",
+    "Design-architetturale.md",
+    "Untitled.canvas",
+    "Guida-utente.md",
     "Sviluppi-futuri.md",
     "Requisiti.md",
     "index.md",
     "Introduzione.md",
-    "Processo-di-sviluppo.md",
-    "Design-di-dettaglio.md",
-    "Implementazione.md",
-    "2023-01-05.md",
-    "Untitled.canvas",
-    "images/git-tree.png"
+    "Processo-di-sviluppo.md"
   ]
 }

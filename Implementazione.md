@@ -202,7 +202,6 @@ val tagTags = for {
 } yield (nestedTag -> t.id)
 ```
 
-
 ## Programmazione reattiva
 
 Usando la librearia akka.stream (non importata direttamente ma come dipendenza di akka.gRPC), ci si imbatte nel concetto di *stream*, ovvero di *flusso attivo in cui si spostano e modificano dati*[^1]. Usando la classe `Source` è possibile immettere dentro lo stream nuovi dati generando degli eventi ai quali, medianti dei *listener*, sarà possibile reagire. La gestione degli eventi viene auto-generata dai file *protobuf* usando il compilatore di Akka gRPC.
@@ -215,6 +214,18 @@ override def writeAllAsStream(in: WriteAllRequest): Source[IOResponse, NotUsed] 
             val futures = in.tuplesList.get.tuples.map(t => space.write(t.value))  
             TusowGRPCCommons.joinFutures(futures)  
             Source(futures.map(f => IOResponse(response = true, message = f.get.toString)).toList)
+```
+
+## Programmazione logica
+
+Per scrivere e leggere tuple da TuSoW è stato utilizzato Prolog.
+
+```scala
+val tuple = new Tuple("", "loves(romeo, juliet).")  
+val readTemplate = new Template.Logic("loves(romeo, X).")
+val writeResponse = Await.result[IOResponse](client.write(new WriteRequest(Some(tupleSpace), Some(tuple))), Duration(5000, TimeUnit.MILLISECONDS))
+val readResponse = Await.result[Tuple](client.read(new ReadOrTakeRequest(Some(tupleSpace), readOrTakeRequestTemplate)), Duration(5000, TimeUnit.MILLISECONDS))
+assert(readResponse == "[X = juliet]")
 ```
 
 [^1]: https://doc.akka.io/docs/akka/current/stream/stream-flows-and-basics.html
@@ -247,6 +258,12 @@ Mentre la lista delle classi a cui ho contribuito parzialmente comprende:
 * `Device`
 
 > Per ogni classe e funzione sviluppata ho implementato il relativo unit test utilizzando `scala-test`.
+Gli unit test che ho sviluppato comprendono le classi:
+
+* `DeployerTest`
+* `GraphTest`
+* `ActuatorTest`
+* `TusowLogicHandlerTest`
 
 ## Andrea Ingargiola
 
@@ -278,3 +295,9 @@ Mentre le classi che ho contribuito a progettare sono:
 * `Device`
 
 > Per ogni classe e funzione sviluppata ho implementato il relativo unit test utilizzando `scala-test`.
+Gli unit test che ho sviluppato comprendono le classi:
+* `FSMTest` 
+* `PublicTest`
+* `GroupTest`
+* `TagTest`   
+
