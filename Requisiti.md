@@ -16,7 +16,7 @@ Di seguito sono riportati i requisiti visti nell'ottica di cosa può fare l'uten
 * l'utente potrà creare, modificare od estendere nuove tipologie di sensori a partire dalle implementazioni già fornite dal framework;
 * analogamento, l'utente potrà creare, modificare od estendere nuove tipologie di attuatori basandosi sulle implementazioni esistenti;
 * l'utente potrà definire la logica di funzionamento di un attuatore da lui creato;
-* l'utente potrà definire zone di dispositivi e la loro logica di funzionamento;
+* l'utente potrà definire gruppi di dispositivi e la loro logica di funzionamento;
 * l'utente potrà salvare i dati rilevati e/o prodotti dai dispositivi;
 * l'utente potrà visualizzare il comportamento dei propri dispositivi mediante un'interfaccia grafica simulativa.
 
@@ -45,7 +45,13 @@ Di seguito sono riportati i requisiti individuati durante lo studio del dominio 
 * Poichè gli attuatori sono dispositivi, deve essere possibile utilizzare tutti i moduli definiti per i dispositivi generici.
 
 
-#### Zone //TODO
+#### Gruppi
+* Un gruppo di dispositivi deve applicare una funzione definita dall'utente agli output prodotti dai membri di quel gruppo, producendo un nuovo risultato aggregato.
+* I gruppi possono essere innestati.
+* A scelta dell'utente è possibile creare un gruppo che aspetta (o non aspetta) di aver collezionato i valori di tutte le sue sorgenti prima di computare la propria funzione.
+* Sono fornite due possibili tipi di funzioni di aggregazione: la riduzione (cioè la fusione dei valori delle sorgenti in un solo valore) e il mapping (cioè la trasformazione di ogni singolo elemento di input secondo la funzione di computazione).
+* Dev'essere possibile astrarre la creazione di un gruppo dall'ordine di generazione degli attori che ne costituiscono le sorgenti.
+* Dev'essere compatibile con il metodo di deployment adottato dal modulo apposito.
 
 #### Deploy
 * La complessità del *deploy* dei dispositivi in ambiente distribuito deve essere mascherata il più possibile;
@@ -61,7 +67,7 @@ Di seguito sono riportati i requisiti individuati durante lo studio del dominio 
 
 Di seguito sono descritti i requisiti non funzionali dell'applicativo:
 
-* ***Usabilità***: facilità nell'utilizzo del framework per realizzare sistemi distribuiti su larga scala; in particolare bisogna ridurre al minimo i requisiti di conoscenza a basso livello delle librerie utilizzate per l'implementazione in modo da appiattire la curva di apprendimento.
+* ***Usabilità***: facilità nell'utilizzo del framework per realizzare sistemi distribuiti su larga scala; in particolare bisogna ridurre al minimo i requisiti di conoscenza a basso livello delle librerie utilizzate per l'implementazione in modo da appiattire la curva di apprendimento, anche attraverso DSL appositi.
 * ***Cross Platform***: sarà possibile eseguire il sistema sui 3 principali sistemi operativi: Linux, Windows, MacOs.
 
 ### Requisiti di implementazione

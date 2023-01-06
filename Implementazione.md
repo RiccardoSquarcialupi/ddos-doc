@@ -192,6 +192,17 @@ def run(): Future[Http.ServerBinding] =
         TusowServiceHandler(tusowAkkaService)
 ```
 
+## For-comprehensions
+
+Tramite le for-comprehensions di Scala è possibile esprimere sinteticamente algoritmi molto complessi in modo idiomatico al linguaggio.
+```scala
+val tagTags = for {  
+  t <- newTags  
+  nestedTag <- t.getTags() if !accumulator.contains((nestedTag -> t.id))  
+} yield (nestedTag -> t.id)
+```
+
+
 ## Programmazione reattiva
 
 Usando la librearia akka.stream (non importata direttamente ma come dipendenza di akka.gRPC), ci si imbatte nel concetto di *stream*, ovvero di *flusso attivo in cui si spostano e modificano dati*[^1]. Usando la classe `Source` è possibile immettere dentro lo stream nuovi dati generando degli eventi ai quali, medianti dei *listener*, sarà possibile reagire. La gestione degli eventi viene auto-generata dai file *protobuf* usando il compilatore di Akka gRPC.
@@ -233,6 +244,37 @@ Mentre la lista delle classi a cui ho contribuito parzialmente comprende:
 * `Deployer`
 * `FSM`
 * `Message`
+* `Device`
+
+> Per ogni classe e funzione sviluppata ho implementato il relativo unit test utilizzando `scala-test`.
+
+## Andrea Ingargiola
+
+Inizialmente mi sono occupato di mantenere una visione d'insieme nel design dei due componenti principali del modulo `Device`, partecipando alla concezione sia dell'Attuatore (implementando la generica macchina a stati finiti) che del Sensore, e implementando direttamente il protocollo di comunicazione dell'astrazione `Device`, cioè il modulo `Public`.
+Dopo di che mi sono dedicato al modulo di `Grouping`, progettando, implementando e testando tutte le classi che lo compongono. Accorgendomi di alcune criticità nella semplicità di utilizzo del modulo sia da solo che in tandem con il modulo `Deployment`, ho deciso di aggiungere il sotto-modulo `Tagging`, che tramite l'utilizzo del pattern factory va a creare un domain-specific language che, oltre a porre rimedio alle lacune di `Grouping`, ha permesso di cimentarmi in funzioni effettivamente complesse da scrivere (`deployGroups`, `retrieveTagSet` e `exploreInnerTags`) e che potessero sfruttare  (e cioè pattern matching, funzioni ricorsive senza side effects, for-comprehension avanzate e uso avanzato delle collezioni).
+
+Le classi progettate e implementate direttamente da me sono:
+* `FSM`
+* `Public`
+* `Subscribe`
+* `SubscribeAck`
+* `Statuses`
+* `Group`
+* `MapGroup`
+* `ReduceGroup`
+* `MultipleOutput`
+* `GroupActor`
+* `BlockingGroup`
+* `NonBlockingGroup`
+* `Tag`, `MapTag` e `ReduceTag`
+* `Deployable`
+* `Taggable`
+* `TriggerMode`
+* `Deployer` (metodi `deployGroups`, `retrieveTagSet` e `exploreInnerTags`)
+
+Mentre le classi che ho contribuito a progettare sono:
+* `Sensor` 
+* `Actuator`
 * `Device`
 
 > Per ogni classe e funzione sviluppata ho implementato il relativo unit test utilizzando `scala-test`.

@@ -148,14 +148,26 @@ Questo è il metodo di cui le due implementazioni fornite con la libreria fanno 
 * ReduceGroup applica tramite una `foldLeft` la funzione di riduzione `f: I => O` su tutta la lista di liste appiattita contentente tutti i valori di input, producendo un singolo valore di output.
 * MapGroup esegue l'override di `Group` tramite un mixin con il trait `MultipleOutput`, che sovrascrive il metodo `propagate()` di `Device` per fare in modo che venga inviato un messaggio di tipo `Statuses[T]` invece che `Status[T]`. Questo perché il MapGroup non fa altro che applicare la funzione di mapping `f: I => O` a ogni elemento della lista di liste appiattita tramite una for comprehension, restituendo in uscita una lista con un numero di elementi variabile ma comunque dipendente in parte dal numero degli elementi processati (e non fissato a uno come nel caso del  `ReduceGroup`).
 
-### Sub-package: Tagging
+## Sub-package: Tagging
 Questo sottopackacge rappresenta un'estensione del package `grouping` che consente all'utente di inizializzare gruppi di lavoro con un domain specific language, utilizzando i metodi di deployment messi a disposizione dal modulo apposito. I gruppi di base infatti richiedono una creazione degli oggetti potenzialmente molto verbosa che mal si adatta agli obbiettivi di user experience prefissati per la libreria. Per inizializzare gruppi di lavoro senza l'ausilio di questo sottomodulo è infatti necessario possedere già alla creazione del gruppo tutte le `ActorRef` delle sorgenti che fanno parte di quel gruppo. Essendo possibile innestare gruppi uno dentro l'altro, questo requisito rischia di rendere la creazione di sistemi complessi inutilmente articolata.
 Per questo motivo in questo modulo è stato fatto largo uso del pattern Factory, attraverso cui vengono generate delle istanze di `Group` rendendo trasparente all'utente l'ordine di generazione dei dispositivi sul cluster.
 Essendo un domain-specific language creato per effettuare il deployment di quanto già presente nel modulo di grouping, è inevitabilmente legato alle classi e alle implementazioni lì presenti, lasciando all'utente l'onere di estendere nel modo giusto anche questo modulo in caso abbia esteso in qualche modo `grouping`.
 
 ![](PPS-Tagging.png)
 
+### Tag
+Un `Tag` costituisce una configurazione per la generazione di una corrispettiva istanza di `Group` tramite il pattern factory durante il deployment.
+La creazione di un tag riduce la dipendenza temporale rispetto a quella di un `Group` perchè utilizza gli `ActorRef` di akka soltanto per definire il campo `destinations`. Campo che può essere modificato anche a runtime tramite l'invio di un messaggio di `Subscribe` da parte di un'eventuale nuova destinazione.
+Un istanza di `Tag` viene generata automaticamente in base ai valori passati alla funzione `apply()` del suo companion object, andando a costituire una specie di factory nella factory. I parametri sono:
+* La lista di id (di tipo stringa) dei dispositivi che costituiranno le sorgenti di dati del gruppo.
+* La lista di destinazioni iniziali (di tipo `ActorRef[Message]`) dello status computato dal gruppo.
+* La sola funzione f di mapping nel caso si voglia creare un `MapTag`.
+* La funzione f di riduzione e il valore iniziale dell'accumulatore nel caso si voglia creare un `ReduceTag`.
+* Il tipo di innesco della computazione (bloccante/ non bloccante), rappresentato come caso dell'enum `TriggerMode`.
+`MapTag` e `ReduceTag` sono case classes concrete che implementano il trait `Tag` effettuando l'override del metodo `generateGroup(sources: ActorList)`, richiamato dal deployer nel momento in cui viene eseguita la vera e propria factory del gruppo, ovvero quando gli attori di tutti i dispositivi i cui id erano contenuti nella lista delle sorgenti del `Tag` sono stati istanziati con successo (rendendo possibile la costruzione della lista di `ActorRef[Message]` in input).
+Il metodo `generateGroup(sources: ActorList)` restituisce come output un'istanza del gruppo parametrizzata secondo i valori con cui è stato creato il `Tag`, effettuando un mixin con il trait `Deployable`, spiegato nel paragrafo seguente.
 
+### Deployable
 
 ## Package: Storage
 
