@@ -1,3 +1,4 @@
+
 In questo capitolo verrà analizzata in maniera dettagliata la struttura del framework, andando a descrivere i singoli componenti e le relazioni fra di essi.
 
 ## Pattern utilizzati
@@ -58,7 +59,6 @@ object Deployer:
 ```
 
 ## Package: Device
-
 ### Attuatore
 
 ![Actuator UML](https://i.imgur.com/NHrWmrB.png)
@@ -74,8 +74,22 @@ Un attuatore può, in base al dispositivo fisico che rappresenta e quindi ad eve
 Se l'attuatore si trovasse nello stato **A** e ricevesse un messaggio *GoTo("B")* allora potrebbe spostarsi nello stato **B**, ma se ricevesse un messaggio *GoTo("D")*, poichè esso non è definito nella FSM, il cambio di stato non verrebbe effettuato.  
 In questo scenario abbiamo utilizzato degli stati privi di comportamenti, ovvero dei `BasicState`, tuttavia è possibile utilizzare stati il cui cambiamento è legato a condizioni sull'evento (`ConditionalState`) oppure a dei timer periodici (`TimedState`).
 Poichè l'attuatore è un `Device`, maschera al suo interno il `Behavior` di un attore tipizzato di *Akka*; lo scambio dei messaggi e il cambiamento di stato costituiscono infatti il `Behavior` restituito dal metodo `getBehavior` che verrà utilizzato per spawnare l'attuatore all'interno del *cluster*.
-Per un uniformare i messaggi scambiati fra i vari attori sia è creato il trait `Message` con varie case class che lo implementano, ad esempio `case class Approved() extends Message`; poichè è necessario che gli utilizzatori finali del framework possano inviare qualunque tipo di oggetto, sono stati creati messaggi che possono incapuslare qualunque tipo utilizzando i generics; ne è un esempio il messaggio `case class MessageWithReply[T](message: T, replyTo: ActorRef[Message], args: T*) extends Message`.
+Per un uniformare i messaggi scambiati fra i vari attori sia è creato il trait `Message` con varie case class che lo implementano, ad esempio `case class Approved() extends Message`; poichè è necessario che gli utilizzatori finali del framework possano inviare qualunque tipo di oggetto, sono stati creati messaggi che possono incapsulare qualunque tipo utilizzando i generics; ne è un esempio il messaggio `case class MessageWithReply[T](message: T, replyTo: ActorRef[Message], args: T*) extends Message`.
 
+### Sensore
+
+![Sensor UML](https://imgur.com/ewmQv6g.png)
+
+Le classi `BasicSensor` e  `ProcessedDataSensor`  sono un'implementazione del *trait* `Device` e mixin della definizione astratta del *trait* `Sensor`. Come tali possono essere istanziati con tutti i mixin disponibili per il *trait* `Device`, ad esempio `Timer` o `Public` oltre che al mixin `Condition` disponibile per il *trait* `Sensor`  . Possono essere quindi creati sensori per ogni possibile combinazione.
+```scala
+new BasicSensor[Double]("1", List(testProbe.ref)) with Timer(interval)
+
+new ProcessedDataSensor[String, Int]("1", List(testProbeProcessed.ref), x => x.toInt) with Public[Int]
+
+new BasicSensor[String]("1", List.empty) with Condition[String, String](_ contains "test", testProbe.ref) with Public[String] with Timer(interval)
+```
+Come l'attuatore, il sensore è un `Device`, ed anch'esso maschera al suo interno il `Behavior` di un attore tipizzato di *Akka*.
+Per lo scambio di messaggi si utilizza il trait `Message` come già visto nell'attuatore precedentemente, ma vengono inoltre messi a disposizione dei messaggi  `case class Status[T](author: ActorRef[Message], value: T) extends Output[T](author, value)` per rappresentare l'invio dello stato del sensore, cioè il dato che sta misurando.
 
 ## Package: Deployment
 
@@ -103,7 +117,7 @@ Fra i metodi messi a disposizione i più utili sono `@->`, il quale si comporta 
 Il *singleton* `Deployer` è l'oggetto centrale del package *deployment*. Esso permette di inizializzare un cluster spawnando i due *seed nodes* definiti a livello di configurazione utilizzando il metodo `initSeedNodes()`; in seguito è possibile aggiungere nuovi nodi al cluster utilizzando il metodo `addNodes(amountOfNodesToSpawn: Int)` (i vari nodi riceveranno una porta casuale fra quelle disponibili).  
 La scelta di dover inizializzare manualmente i nodi del cluster è stata effettuata poichè si riteneva, in linea coi requisiti, dare il maggior controllo possibile agli utilizzatori del framework pur mascherando la complessità di Akka sottostante.  
 
-Il metodo `deploy[T](devices: Device[T]*)` è invece il metodo che, preso uno o più `Device` (*varargs*), gli spawna come figli dei vari nodi del cluster distribuendoli in modo che ogni nodo abbia lo stesso numero di figli (*load balancing*); tale metodo è però privato, poichè per spawnare i dispositivi si utilizza un metodo omonomo ma con signature diversa: `deploy[T](devicesGraph: Graph[Device[T]])`. Usando un grafo di `Device` è possibile sia spawnare i vari dispositivi, sia definire le relazioni di publish/subscribe fra di essi; questo layer di astrazione aggiuntivo rende più facile il deploy su larga scala di molti dispotivi.
+Il metodo `deploy[T](devices: Device[T]*)` è invece il metodo che, preso uno o più `Device` (*varargs*), li spawna come figli dei vari nodi del cluster distribuendoli in modo che ogni nodo abbia lo stesso numero di figli (*load balancing*); tale metodo è però privato, poichè per spawnare i dispositivi si utilizza un metodo omonimo ma con signature diversa: `deploy[T](devicesGraph: Graph[Device[T]])`. Usando un grafo di `Device` è possibile sia spawnare i vari dispositivi, sia definire le relazioni di publish/subscribe fra di essi; questo layer di astrazione aggiuntivo rende più facile il deploy su larga scala di molti dispotivi.
 
 ## Package: Grouping
 
