@@ -11,9 +11,9 @@ Le **Sprint** hanno una durata media di due settimane, in cui idealmente nella p
 Come strumento di gestione delle Sprint abbiamo utilizzato **Jira**, un software sviluppato dall'Atlassian (la stessa che sviluppa Confluence e Bitbucket) che offre avanzati strumenti di project management per team *agile*.
 
 Sono stati utilizzati quattro tipi di ticket:
-* **Task**: il ticket principalmente più utilizzato e che identifica un risultato da implementare/realizzare
-* **Story**: a livello pratico è identico al task ma concettualmente indica un risultato da raggiungere dal punto di vista del cliente o ad un livello di astrazione più alto (e.g. pianificazione di un componente)
-* **Bug**: ticket utilizzato per il bug-tracking
+* **Task**: il ticket principalmente più utilizzato e che identifica un risultato da implementare/realizzare;
+* **Story**: a livello pratico è identico al task ma concettualmente indica un risultato da raggiungere dal punto di vista del cliente o ad un livello di astrazione più alto (e.g. pianificazione di un componente);
+* **Bug**: ticket utilizzato per il bug-tracking;
 * **Epic**: è un ticket utilizzato per raggruppare più task/story e definire limiti temporali (e.g. diagramma di Gantt); è stata utilizzata per raggruppare i vari ticket in base ai moduli di appartenza e stimare il tempo necessario per la realizzazione del progetto.
 
 ![Diagramma di Gantt delle EPIC del progetto](./images/epic.png)
@@ -22,17 +22,17 @@ I ticket vengono creati, assegnati e gestiti dal **product backlog**, uno degli 
 
 ![Product Backlog](./images/backlog.png)
 
-Sempre dal *backlog* è possibile definire ed avviare le *sprint*. Quest'ultime utilizzano quattro colonne diverse per indicare lo stato di lavoro di un ticket: da completare, in corso, to be tested, completato.
+Sempre dal *backlog* è possibile definire ed avviare le *sprint*. Quest'ultime utilizzano quattro colonne diverse per indicare lo stato di avanzamento di un ticket: da completare, in corso, to be tested, completato.
 
 ![Board Sprint](./images/board.png)
 
 ## Branching strategy
 
-Come branching strategy si è deciso di adottare il GitFlow Workflow.
+Come branching strategy abbiamo adottato il GitFlow Workflow.
 
 ![GitFlow Workflow scheme](./images/gitflow.svg)
 
-I branch principali sono `master`, `development` e `feature/*`.  
+I branch principali sono `master`, `development` e `feature/PPS-<ID>`.  
 Il branch master contiene le varie release del framework, rigorosamente taggate con la versione di rilascio.  
 Il branch `development` è il branch che contiene tutto il codice in via di sviluppo (ma la cui compilazione è sempre garantita) dal quale vengono creati i branch per l'aggiunta delle nuove feature.  
 Per ogni ticket viene creato un branch a partire da `development`, chiamato `feature/ID-DEL-TICKET-JIRA` (e.g. `feature/PPS-5`), il quale verrà *mergiato* sul branch padre al termine dello sviluppo (creazione dei test compresa).  
@@ -48,4 +48,4 @@ Ogni commit deve iniziare con l'ID del ticket di Jira, in modo che su Bitbucket 
 
 ![Pipeline di BitBucket](./images/pipeline.png)
 
-Per verificare che il codice pushato sia sempre privo di errori, è stata creata una Pipeline BitBucket (identica alle GitHub Actions), che builda il codice e poi esegue tutti gli unit test del progetto.  
+Per verificare che il codice pushato sia sempre privo di errori, è stata creata una Pipeline BitBucket (l'analoga alle GitHub Actions), che builda il codice e poi esegue tutti gli unit test del progetto.  

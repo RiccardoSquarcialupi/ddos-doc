@@ -1,26 +1,26 @@
-### Requisiti di Business
+### Requisiti di business
 
-L'obiettivo è quello di realizzare una libreria che faciliti l'utilizzo di qualsiasi tipo di sensori e di attuatori in un qualsiasi contesto IoT. La libreria metterà a disposizione un insieme di oggetti e di funzionalità che permetteranno all'utente di creare e gestire i propri dispositivi. In particolare, si darà la possibilità all'utente di:
+L'obiettivo è quello di realizzare una libreria che faciliti l'utilizzo di qualunque tipologia di dispositivo IoT, nello specifico di sensori ed attuatori. La libreria metterà a disposizione un insieme di oggetti e di funzionalità che permetteranno all'utente di creare e gestire i propri dispositivi. In particolare, si darà la possibilità all'utente di:
 
 * Creare sensori ed attuatori di ogni tipologia;
 * Creare gruppi virtuali di sensori;
-* Sviluppare un sistema distribuito di dispositivi e zone;
-* Salvare i dati in maniera distribuita.
+* Effettuare il *deploy* dei dispositivi in un ambiente distribuito;
+* Gestione semplificata della persistenza dei dati.
 
 Dopo che l'utente avrà definito i propri dispositivi e le proprie zone, potrà anche monitorare il funzionamento complessivo mediante un'interfaccia grafica dedicata.
 
-### Requisiti Utente
+### Requisiti utente
 
 Di seguito sono riportati i requisiti visti nell'ottica di cosa può fare l'utente:
 
-* l'utente potrà creare nuove tipologie di sensori "custom" a partire da quelle di base già presenti o modificare/estendere quelle presenti;
-* l'utente potrà creare nuove tipologie di attuatori "custom" a partire da quelle di base già presenti o modificare/estendere quelle presenti;
+* l'utente potrà creare, modificare od estendere nuove tipologie di sensori a partire dalle implementazioni già fornite dal framework;
+* analogamento, l'utente potrà creare, modificare od estendere nuove tipologie di attuatori basandosi sulle implementazioni esistenti;
 * l'utente potrà definire la logica di funzionamento di un attuatore da lui creato;
 * l'utente potrà definire zone di dispositivi e la loro logica di funzionamento;
 * l'utente potrà salvare i dati rilevati e/o prodotti dai dispositivi;
 * l'utente potrà visualizzare il comportamento dei propri dispositivi mediante un'interfaccia grafica simulativa.
 
-### Requisiti Funzionali
+### Requisiti funzionali
 
 Di seguito sono riportati i requisiti individuati durante lo studio del dominio e le regole scelte per la sua rappresentazione.
 
@@ -38,14 +38,26 @@ Di seguito sono riportati i requisiti individuati durante lo studio del dominio 
 * Il `BasicSensor` è un sensore concreto che effettua una pre-elaborazione di base del dato;
 * Il `ProcessedDataSensor` è un sensore concreto che effettua una qualsiasi pre-elaborazione del dato specificata direttamente dall'utente.
 
-#### Attuatori //TODO
+#### Attuatori
+* Gli attuatori sono dispositivi che reagiscono ad eventi interni e/o esterni variando il loro stato e propagandone l'avvenimento;
+* I possibili stati di un attuatore devono essere definiti con una macchina a stati finiti;
+* Gli stati possono avere una logica basilare oppure variare in base ad un timer o ad una condizione applicata ad un evento;
+* Poichè gli attuatori sono dispositivi, deve essere possibile utilizzare tutti i moduli definiti per i dispositivi generici.
+
 
 #### Zone //TODO
 
-#### Deploy //TODO
+#### Deploy
+* La complessità del *deploy* dei dispositivi in ambiente distribuito deve essere mascherata il più possibile;
+* la configurazione dell'ambiente deve essere consentita tramite apposite funzioni, fra cui l'aggiunta di nuovi nodi del *cluster* ;
+* sarà possibile *deployare* i dispositivi utilizzando un grafo di dipendenze; ogni arco indicherà la relazione publish/subscribe fra i due dispositivi connessi.
 
+#### Storage
+* fra i vari dispositivi dovrà essere possibile crearne uno virtuale che riceve i dati da ogni altro dispositivo per poi salvarli sulla tipologia di gestione dei dati scelta;
+* l'unica modalità di persistenza dei dati offerta al rilascio del framework sarà TuSoW
+* per il corretto funzionamento di TuSoW in ambiente Scala sarà necessario effettuare delle modifiche mirate, volte anche all'integrazione con librerie terze.
 
-### Requisiti non Funzionali
+### Requisiti non funzionali
 
 Di seguito sono descritti i requisiti non funzionali dell'applicativo:
 
@@ -56,7 +68,7 @@ Di seguito sono descritti i requisiti non funzionali dell'applicativo:
 
 ll sistema sarà sviluppato in Scala 3 ed utilizza le seguenti librerie:
 
-* Akka - Akka-Actor-Typed - Akka-Cluster-Typed v2.7.0
+* Akka, Akka-Actor-Typed, Akka-Cluster-Typed v2.7.0
 * ScalaTest v3.2.14
 * TuSoW v0.8.3
 * ScalaFX v19
