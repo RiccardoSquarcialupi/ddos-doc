@@ -206,6 +206,18 @@ override def writeAllAsStream(in: WriteAllRequest): Source[IOResponse, NotUsed] 
             Source(futures.map(f => IOResponse(response = true, message = f.get.toString)).toList)
 ```
 
+## Programmazione logica
+
+Per scrivere e leggere tuple da TuSoW è stato utilizzato Prolog.
+
+```scala
+val tuple = new Tuple("", "loves(romeo, juliet).")  
+val readTemplate = new Template.Logic("loves(romeo, X).")
+val writeResponse = Await.result[IOResponse](client.write(new WriteRequest(Some(tupleSpace), Some(tuple))), Duration(5000, TimeUnit.MILLISECONDS))
+val readResponse = Await.result[Tuple](client.read(new ReadOrTakeRequest(Some(tupleSpace), readOrTakeRequestTemplate)), Duration(5000, TimeUnit.MILLISECONDS))
+assert(readResponse == "[X = juliet]")
+```
+
 [^1]: https://doc.akka.io/docs/akka/current/stream/stream-flows-and-basics.html
 
 # Sezioni personali
@@ -235,4 +247,9 @@ Mentre la lista delle classi a cui ho contribuito parzialmente comprende:
 * `Message`
 * `Device`
 
-> Per ogni classe e funzione sviluppata ho implementato il relativo unit test utilizzando `scala-test`.
+Gli unit test che ho sviluppato comprendono le classi:
+
+* `DeployerTest`
+* `GraphTest`
+* `ActuatorTest`
+* `TusowLogicHandlerTest`

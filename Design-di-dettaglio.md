@@ -242,6 +242,16 @@ In questo modo gli attori del cluster possono chiamare le *procedure* di Tusow i
 
 ![Sequence diagram of TuSoW](https://i.imgur.com/82MH7vr.png)
 
+Esempio di scrittura e lettura di una tupla su uno spazio delle tuple logico utilizzando Prolog:
+
+```scala
+val tuple = new Tuple("", "loves(romeo, juliet).")  
+val readTemplate = new Template.Logic("loves(romeo, X).")
+val writeResponse = Await.result[IOResponse](client.write(new WriteRequest(Some(tupleSpace), Some(tuple))), Duration(5000, TimeUnit.MILLISECONDS))
+val readResponse = Await.result[Tuple](client.read(new ReadOrTakeRequest(Some(tupleSpace), readOrTakeRequestTemplate)), Duration(5000, TimeUnit.MILLISECONDS))
+assert(readResponse == "[X = juliet]")
+```
+
 ## Struttura del progetto
 
 La struttura dei package del progetto è la seguente:
