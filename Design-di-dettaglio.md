@@ -58,7 +58,7 @@ object Deployer:
 
 ### Factory
 
-Il pattern *factory* è stato utilizzato per favorire l'usabilità della libreria, facilitando la creazione di alcuni oggetti complessi che avrebbero richiesto costruttori molto verbosi o con forti dipendenze temporali dovuti alla programmazione ad attori. Un esempio dell'appplicazione di questo pattern è la generazione di un `Group` a partire da un `Tag` richiamando il metodo `generateGroup()`, che ha come argomento una lista di `ActorRef` akka, ottenibile dopo la creazione dell'istanza di `Tag`. 
+Il pattern *factory* è stato utilizzato per favorire l'usabilità della libreria, facilitando la creazione di alcuni oggetti complessi che avrebbero richiesto costruttori molto verbosi o con forti dipendenze temporali dovuti alla programmazione ad attori. Un esempio dell'appplicazione di questo pattern è la generazione di un `Group` a partire da un `Tag` richiamando il *factoryMethod* `generateGroup()`, che ha come argomento una lista di `ActorRef` akka, ottenibile dopo la creazione dell'istanza di `Tag`. 
 ```scala
 case class MapTag[I,O](
 	override val id: String, 
