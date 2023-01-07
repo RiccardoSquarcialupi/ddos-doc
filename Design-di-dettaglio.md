@@ -1,4 +1,3 @@
-
 In questo capitolo verrà analizzata in maniera dettagliata la struttura del framework, andando a descrivere i singoli componenti e le relazioni fra di essi.
 
 ## Pattern utilizzati
@@ -55,6 +54,19 @@ object Deployer:
       edges.filter(!alreadyDeployed.contains(_)).foreach(deploy(_))  
     })  
     devicesGraph @-> ((k, v) => v.map(it => devicesActorRefMap.get(it.id)).filter(_.isDefined).foreach(device => devicesActorRefMap(k.id).ref ! Subscribe(device.get.ref)))  
+```
+
+### Factory
+
+Il pattern *factory* è stato utilizzato per favorire l'usabilità della libreria, facilitando la creazione di alcuni oggetti complessi che avrebbero richiesto costruttori molto verbosi o con forti dipendenze temporali dovuti alla programmazione ad attori. Un esempio dell'appplicazione di questo pattern è la generazione di un `Group` a partire da un `Tag` richiamando il metodo `generateGroup()`, che ha come argomento una lista di `ActorRef` akka, ottenibile dopo la creazione dell'istanza di `Tag`. 
+```scala
+case class MapTag[I,O](
+	override val id: String, 
+	val dest: ActorList, 
+	val f: I => O, 
+	val tm: TriggerMode) extends Tag[I, List[O]](id):  
+  override def generateGroup(sources: ActorList): MapGroup[I,O] = 
+	  new MapGroup(id, sources, dest, f) with Deployable[I,List[O]](tm)
   
 ```
 
@@ -126,7 +138,8 @@ Il modulo Grouping mette a disposizione un tipo particolare di device che permet
 ![](PPS-Grouping.png)
 
 ### GroupActor
-Il trait `GroupActor` definisce il behavior Akka del gruppo, ovvero come l'attore reagisce ai vari messaggi che può ricevere. L'attore è stato pensato come macchina a stati finiti composta da due stati: `connecting` e `active`. Per cercare di aderire a uno stile di programmazione puramente funzionale questi due stati sono stati implementati come funzioni ricorsive pure che restituiscono un Behavior akka.
+
+Il trait `GroupActor` definisce il behavior akka del gruppo, ovvero come l'attore reagisce ai vari messaggi che può ricevere. L'attore è stato pensato come macchina a stati finiti composta da due stati: `connecting` e `active`. Per cercare di aderire a uno stile di programmazione puramente funzionale questi due stati sono stati implementati come funzioni ricorsive pure che restituiscono un Behavior akka.
 Alla creazione dell'attore, l'oggetto scala che implementa `GroupActor` crea una copia dell'istanza di `Group` con cui è stata invocata l'`apply()` e ne utilizza il campo `sources` per definire la lista di `Device` a cui sottoscriversi e da cui aspettarsi il `SubscribeAck`, passando allo stato `connecting()`.
 In questo stato l'attore rimane in attesa di aver collezionato il `SubscribeAck` di tutta la lista di sorgenti, mandando nuovamente il messaggio di `Subscribe` dopo un certo intervallo di tempo grazie al messaggio di `Timeout` che l'attore si invia attraverso un timer interno.
 Una volta collezionati tutti gli ack, l'attore passa allo stato `active()`, in cui rimane in attesa dei dati delle varie sorgenti.
@@ -139,6 +152,7 @@ Essendo il gruppo stesso un Device, esiste il caso in cui più gruppi siano inne
 In questo modo le sorgenti che mandano messaggi di tipo `Status[T]` (sensori e attuatori) vengono processate allo stesso modo di quelle che mandano messaggi di tipo `Statuses[T]`, mantenendo la giusta semantica del tipo T, e cioè il tipo di dato rilevato dal sensore/elaborato dal gruppo.
 
 ### Group
+
 La classe astratta `Group[I,O]` e le sue implementazioni costituiscono il nucleo della configurazione del gruppo di lavoro. Al suo interno sono presenti sia i campi per la conservazione degli input da trattare, che la funzione higher order definita dall'utente in fase di creazione per trattarli.
 Una sua istanza rappresenta lo stato dell'attore, che ne richiama i metodi in risposta ai messaggi che riceve.
 In particolare, `insert(author: Actor, newValues: List[I])` viene richiamato per inserire nella mappa sorgente -> valori il nuovo valore ricevuto con un messaggio di tipo `Statuses[I]`
@@ -149,13 +163,19 @@ Questo è il metodo di cui le due implementazioni fornite con la libreria fanno 
 * MapGroup esegue l'override di `Group` tramite un mixin con il trait `MultipleOutput`, che sovrascrive il metodo `propagate()` di `Device` per fare in modo che venga inviato un messaggio di tipo `Statuses[T]` invece che `Status[T]`. Questo perché il MapGroup non fa altro che applicare la funzione di mapping `f: I => O` a ogni elemento della lista di liste appiattita tramite una for comprehension, restituendo in uscita una lista con un numero di elementi variabile ma comunque dipendente in parte dal numero degli elementi processati (e non fissato a uno come nel caso del  `ReduceGroup`).
 
 ## Sub-package: Tagging
-Questo sottopackacge rappresenta un'estensione del package `grouping` che consente all'utente di inizializzare gruppi di lavoro con un domain specific language, utilizzando i metodi di deployment messi a disposizione dal modulo apposito. I gruppi di base infatti richiedono una creazione degli oggetti potenzialmente molto verbosa che mal si adatta agli obbiettivi di user experience prefissati per la libreria. Per inizializzare gruppi di lavoro senza l'ausilio di questo sottomodulo è infatti necessario possedere già alla creazione del gruppo tutte le `ActorRef` delle sorgenti che fanno parte di quel gruppo. Essendo possibile innestare gruppi uno dentro l'altro, questo requisito rischia di rendere la creazione di sistemi complessi inutilmente articolata.
+
+Questo sottopackage rappresenta un'estensione del package `grouping` che consente all'utente di inizializzare gruppi di lavoro con un domain specific language, utilizzando i metodi di deployment messi a disposizione dal modulo apposito. I gruppi di base infatti richiedono una creazione degli oggetti potenzialmente molto verbosa che mal si adatta agli obbiettivi di user experience prefissati per la libreria. Per inizializzare gruppi di lavoro senza l'ausilio di questo sottomodulo è infatti necessario possedere già alla creazione del gruppo tutte le `ActorRef` delle sorgenti che fanno parte di quel gruppo. Essendo possibile innestare gruppi uno dentro l'altro, questo requisito rischia di rendere la creazione di sistemi complessi inutilmente articolata.
 Per questo motivo in questo modulo è stato fatto largo uso del pattern Factory, attraverso cui vengono generate delle istanze di `Group` rendendo trasparente all'utente l'ordine di generazione dei dispositivi sul cluster.
 Essendo un domain-specific language creato per effettuare il deployment di quanto già presente nel modulo di grouping, è inevitabilmente legato alle classi e alle implementazioni lì presenti, lasciando all'utente l'onere di estendere nel modo giusto anche questo modulo in caso abbia esteso in qualche modo `grouping`.
 
 ![](PPS-Tagging.png)
 
+### Taggable
+
+Questo semplice trait mette a disposizione delle classi che lo utilizzano in mixin i metodi e la struttura dati per poter "essere marcati da un Tag", ovvero conservare un riferimento a quel tag nell'apposita lista in modo da segnalare al Deployer che l'oggetto che lo continene, una volta trasformato in attore, dovrà costituire una sorgente dati del gruppo generato da quel Tag.
+
 ### Tag
+
 Un `Tag` costituisce una configurazione per la generazione di una corrispettiva istanza di `Group` tramite il pattern factory durante il deployment.
 La creazione di un tag riduce la dipendenza temporale rispetto a quella di un `Group` perchè utilizza gli `ActorRef` di akka soltanto per definire il campo `destinations`. Campo che può essere modificato anche a runtime tramite l'invio di un messaggio di `Subscribe` da parte di un'eventuale nuova destinazione.
 Un istanza di `Tag` viene generata automaticamente in base ai valori passati alla funzione `apply()` del suo companion object, andando a costituire una specie di factory nella factory. I parametri sono:
@@ -168,6 +188,23 @@ Un istanza di `Tag` viene generata automaticamente in base ai valori passati all
 Il metodo `generateGroup(sources: ActorList)` restituisce come output un'istanza del gruppo parametrizzata secondo i valori con cui è stato creato il `Tag`, effettuando un mixin con il trait `Deployable`, spiegato nel paragrafo seguente.
 
 ### Deployable
+
+Questo trait sovrascrive il metodo `behavior()` di `Group` (ereditato da `Device`) in modo da essere compatibile con il metodo di deployment usato anche per le altre sottoclassi di `Device`.
+Il `Group` di base infatti restituisce un behavior vuoto che sarebbe inutilizzabile per generare l'attore, richiedendo che l'utente specifichi il metodo di innesco fuori dal suo costruttore.
+Possedendo il `Tag` questa informazione alla creazione (nel campo `tm`, cioè la `TriggerMode`), è sufficiente usare una factory per permettere al `Deployer` di creare l'attore del gruppo richiamando il metodo `behavior()` dell'istanza generata attraverso la `generateGroup()`, che avrà in mixin questo trait.
+
+Grazie alla somma di queste classi è possibile passare da questo modo di inizializzare:
+```scala
+BlockingGroup(
+	new MapGroup[String, String](
+		"id1", sensors, List(destination1), f => f.toUpperCase 
+	)
+)
+```
+A questo, compatibile con il metodo `deploy(d: Device)` del `Deployer` (richiamando il metodo `behavior()` sull'output di `generateGroup()`):
+```scala
+Tag[String, String]("id1", List(destination1), f => f.toUpperCase, TriggerMode.BLOCKING)
+```
 
 ## Package: Storage
 
