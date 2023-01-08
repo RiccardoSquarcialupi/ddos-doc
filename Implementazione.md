@@ -236,7 +236,7 @@ assert(readResponse == "[X = juliet]")
 ## Filippo Cavallari
 
 Durante lo sviluppo del primo modulo mi sono occupato dello sviluppo dell'attuatore (classe `Actuator`) e degli stati (`State`, `BasicState`, `CondState`, `TimedState`). In seguito ho contribuito allo sviluppo del modulo di deployment, implementando la struttura dati `Graph` e il metodo per deployare un grafo di dispositivi. Per concludere ho sviluppato l'intero modulo di storage, integrando TuSoW con Akka gRPC in modo che potesse essere utilizzato all'interno del framework; quest'ultimo sviluppo è quello che si è rivelato essere più complesso ma che a permesso di integrare la programmazione logica con quella funzionale.
-Sebbene alcune classi non fossero di mia competenza, duramente alcune situazioni critiche ho contribuito ad implementare alcune funzionalità ed a risolvere alcuni bug bloccanti.
+Sebbene alcune classi non fossero di mia competenza, durante alcune situazioni critiche ho contribuito ad implementare alcune funzionalità ed a risolvere alcuni bug bloccanti.
 
 La lista finale delle classi che ho sviluppato in autonomia sono:
 * `Actuator`
@@ -269,8 +269,8 @@ Gli unit test che ho sviluppato comprendono le classi:
 
 ## Andrea Ingargiola
 
-Inizialmente mi sono occupato di mantenere una visione d'insieme nel design dei due componenti principali del modulo `Device`, partecipando alla concezione sia dell'Attuatore (implementando la generica macchina a stati finiti) che del Sensore, e implementando direttamente il protocollo di comunicazione dell'astrazione `Device`, cioè il modulo `Public`.
-Dopo di che mi sono dedicato al modulo di `Grouping`, progettando, implementando e testando tutte le classi che lo compongono. Accorgendomi di alcune criticità nella semplicità di utilizzo del modulo sia da solo che in tandem con il modulo `Deployment`, ho deciso di aggiungere il sotto-modulo `Tagging`, che tramite l'utilizzo del pattern factory va a creare un domain-specific language che, oltre a porre rimedio alle lacune di `Grouping`, ha permesso di cimentarmi in funzioni effettivamente complesse da scrivere (`deployGroups`, `retrieveTagSet` e `exploreInnerTags`) e che potessero sfruttare  (e cioè pattern matching, funzioni ricorsive senza side effects, for-comprehension avanzate e uso avanzato delle collezioni).
+Inizialmente mi sono occupato di mantenere una visione d'insieme nel design dei due componenti principali del modulo `Device`, partecipando alla progettazione sia dell'Attuatore (implementando la generica macchina a stati finiti) che del Sensore, e implementando direttamente il protocollo di comunicazione dell'astrazione `Device`, cioè il modulo `Public`.
+Dopo di che mi sono dedicato al modulo di `Grouping`, progettando, implementando e testando tutte le classi che lo compongono. Accorgendomi di alcune criticità nella semplicità di utilizzo del modulo sia da solo che in combinazione con il modulo `Deployment`, ho deciso di aggiungere il sotto-modulo `Tagging`, che tramite l'utilizzo del pattern factory va a creare un domain-specific language che, oltre a porre rimedio alle lacune di `Grouping`, mi ha permesso di cimentarmi in funzioni complesse da scrivere (`deployGroups`, `retrieveTagSet` e `exploreInnerTags`) che potessero sfruttare alcuni costrutti avanzati della parte funzionale del linguaggio (e cioè pattern matching, funzioni ricorsive tail senza side effects, for-comprehension avanzate e uso spinto delle collezioni).
 
 Le classi progettate e implementate direttamente da me sono:
 * `FSM`
