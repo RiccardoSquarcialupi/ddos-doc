@@ -80,5 +80,3 @@ ll sistema sarà sviluppato in Scala 3 ed utilizza le seguenti librerie:
 * ScalaFX v19
 
 Lo unit testing è effettuato utilizzando ScalaTest e Akka TestKit.
-
-Il codice sorgente è controllato ad ogni compilazione mediante l'utilizzo del linter ScalaFMT.
