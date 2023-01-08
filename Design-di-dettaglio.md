@@ -76,7 +76,7 @@ case class MapTag[I,O](
 
 ![Actuator UML](https://i.imgur.com/NHrWmrB.png)
 
-La classe `Actuator` è un'implementazione del *trait* `Device`. Come tale può venir istanziato con tutti i mixin disponibili per il `trait Device`, ad esempio `Public`.
+La classe `Actuator` è un'implementazione del *trait* `Device`. Come tale può venire istanziato con tutti i mixin disponibili per il `trait Device`, ad esempio `Public`.
 ```scala
 new Actuator[String]("actuatorTest", fsm) with Public[String]
 ```
@@ -86,8 +86,8 @@ Un attuatore può, in base al dispositivo fisico che rappresenta e quindi ad eve
 
 Se l'attuatore si trovasse nello stato **A** e ricevesse un messaggio *GoTo("B")* allora potrebbe spostarsi nello stato **B**, ma se ricevesse un messaggio *GoTo("D")*, poichè esso non è definito nella FSM, il cambio di stato non verrebbe effettuato.  
 In questo scenario abbiamo utilizzato degli stati privi di comportamenti, ovvero dei `BasicState`, tuttavia è possibile utilizzare stati il cui cambiamento è legato a condizioni sull'evento (`ConditionalState`) oppure a dei timer periodici (`TimedState`).
-Poichè l'attuatore è un `Device`, maschera al suo interno il `Behavior` di un attore tipizzato di *Akka*; lo scambio dei messaggi e il cambiamento di stato costituiscono infatti il `Behavior` restituito dal metodo `getBehavior` che verrà utilizzato per spawnare l'attuatore all'interno del *cluster*.
-Per un uniformare i messaggi scambiati fra i vari attori sia è creato il trait `Message` con varie case class che lo implementano, ad esempio `case class Approved() extends Message`; poichè è necessario che gli utilizzatori finali del framework possano inviare qualunque tipo di oggetto, sono stati creati messaggi che possono incapsulare qualunque tipo utilizzando i generics; ne è un esempio il messaggio `case class MessageWithReply[T](message: T, replyTo: ActorRef[Message], args: T*) extends Message`.
+Poichè l'attuatore è un `Device`, maschera al suo interno il `Behavior` di un attore tipizzato di *Akka*; lo scambio dei messaggi e il cambiamento di stato costituiscono infatti il `Behavior` restituito dal metodo `getBehavior` che verrà utilizzato per istanziare ed aggiungere l'attuatore all'interno del *cluster*.
+Per uniformare i messaggi scambiati fra i vari attori sia è creato il trait `Message` con varie *case class* che lo implementano, ad esempio `case class Approved() extends Message`; poichè è necessario che gli utilizzatori finali del framework possano inviare qualunque tipo di oggetto, sono stati creati messaggi che possono incapsulare qualunque tipo di oggetto utilizzando i generics; ne è un esempio il messaggio `case class MessageWithReply[T](message: T, replyTo: ActorRef[Message], args: T*) extends Message`.
 
 ### Sensore
 
@@ -109,7 +109,7 @@ Per lo scambio di messaggi si utilizza il trait `Message` come già visto nell'a
 
 ### Graph
 
-La classe `Graph` è una struttura dati usata per costruire grafi orientati non pesati.  
+La classe `Graph` è una struttura dati utilizzata per costruire grafi orientati non pesati.  
 Il metodo `apply` è stato pensato per semplificare notevolmente la costruzione di un grafo sfruttando la sintassi delle tuple 2D.
 
 ```scala
@@ -122,16 +122,16 @@ Graph[String](
 )
 ```
 
-Queste coppie di tuple vengono poi raggruppate usando come chiave il primo elemento della tupla, inserendo i secondi elementi in una lista. Si ricava quindi una mappa [K, List[K]] che associa ad un nodo tutti i nodi raggiungibili da esso; poichè il grafo è non pesato, utilizzare una struttura dati per gli archi era superfluo.
+Queste coppie di tuple vengono poi raggruppate usando come chiave il primo elemento della tupla, inserendo i secondi elementi in una lista. Si ricava quindi una mappa `[K, List[K]]` che associa ad un nodo tutti i nodi raggiungibili da esso; poichè il grafo è non pesato, utilizzare una struttura dati per gli archi è superfluo.
 
 Fra i metodi messi a disposizione i più utili sono `@->`, il quale si comporta come un for-each per ogny *entry* della mappa, `?` che verifica l'esistenza di un nodo e `?->` che fornisce la lista dei nodi raggiungibili da un altro nodo (lista vuoto in caso non ci siano archi).
 
 ### Deployer
 
 Il *singleton* `Deployer` è l'oggetto centrale del package *deployment*. Esso permette di inizializzare un cluster spawnando i due *seed nodes* definiti a livello di configurazione utilizzando il metodo `initSeedNodes()`; in seguito è possibile aggiungere nuovi nodi al cluster utilizzando il metodo `addNodes(amountOfNodesToSpawn: Int)` (i vari nodi riceveranno una porta casuale fra quelle disponibili).  
-La scelta di dover inizializzare manualmente i nodi del cluster è stata effettuata poichè si riteneva, in linea coi requisiti, dare il maggior controllo possibile agli utilizzatori del framework pur mascherando la complessità di Akka sottostante.  
+La scelta di dover inizializzare manualmente i nodi del cluster è stata effettuata poichè si riteneva, in linea coi requisiti, di dover fornire il maggior controllo possibile agli utilizzatori del framework pur mascherando la complessità di Akka sottostante.  
 
-Il metodo `deploy[T](devices: Device[T]*)` è invece il metodo che, preso uno o più `Device` (*varargs*), li spawna come figli dei vari nodi del cluster distribuendoli in modo che ogni nodo abbia lo stesso numero di figli (*load balancing*); tale metodo è però privato, poichè per spawnare i dispositivi si utilizza un metodo omonimo ma con signature diversa: `deploy[T](devicesGraph: Graph[Device[T]])`. Usando un grafo di `Device` è possibile sia spawnare i vari dispositivi, sia definire le relazioni di publish/subscribe fra di essi; questo layer di astrazione aggiuntivo rende più facile il deploy su larga scala di molti dispotivi.
+Il metodo `deploy[T](devices: Device[T]*)` è invece il metodo che, preso uno o più `Device` (*varargs*), li istanzia come figli dei vari nodi del cluster distribuendoli in modo che ogni nodo abbia lo stesso numero di figli (*load balancing*); è anche possibile istanziare nuovi dispositivi utilizzando un metodo omonimo ma con firma diversa: `deploy[T](devicesGraph: Graph[Device[T]])`. Usando un grafo di `Device` è quindi possibile istanziare i vari dispositivi ma anche definire le relazioni di publish/subscribe fra di essi; questo layer di astrazione aggiuntivo rende più facile il deploy su larga scala di molti dispotivi.
 
 ## Package: Grouping
 
@@ -238,12 +238,12 @@ Il messaggio _TupleSpaceID_ contiene sia l'ID di un _tuple space_ sia il suo tip
 
 ##### TupleSpaceType
 
-Questo messaggio è banale _enum_ usato per specificare la tipologia del *tuple space*.
+Questo messaggio è un _enum_ usato per specificare la tipologia del *tuple space*.
 
 ##### IOResponse / IOResponseList
 
 Il messaggio _IOResponse_ è il risultato delle operazioni di input e restituisce un feedback sull'esito dell'operazione usando un valore booleano ed una stringa con una descrizione dettagliata.
-L'*IOResponseList* è una lista di * IOResponse*; viene create usanda la keyword `repeated`.
+L'*IOResponseList* è una lista di *IOResponse*; viene create usanda la keyword `repeated`.
 
 ##### Tuple / TupleList
 
@@ -302,7 +302,7 @@ Lo sviluppo ha richiesto di scrivere l'implementazione delle *remote procedure* 
 ![Storage package classes UML](https://i.imgur.com/otYr8Ua.png)
 
 Il trait `TusowService` è l'interfaccia generata dallo schema protobuf, la quale viene implementata dalla classe `TusowAkkaService`; quest'ultima filtra le richieste in base alla tipologia di *tuple space* e delega l'elaborazione alle classi `TusowAkkaTextualHandler` (in caso di tuple space testuali) e `TusowAkkaLogicHandler` (in caso di tuple space logici).  
-La classe `TusowServer` si occupa di invece di spawnare un nuovo nodo da aggiungere al cluster predefinito; questo nodo avrà come figlio un attore non tipizzato di *Akka* il cui *behavior* è dato da una nuova istanza di `TusowAkkaService`.  
+La classe `TusowServer` si occupa di invece di istanziare un nuovo nodo da aggiungere al cluster predefinito; questo nodo avrà come figlio un attore non tipizzato di *Akka* il cui *behavior* è dato da una nuova istanza di `TusowAkkaService`.  
 In questo modo gli attori del cluster possono chiamare le *procedure* di Tusow interagendo col neonato attore.  
 
 ![Sequence diagram of TuSoW](https://i.imgur.com/82MH7vr.png)
