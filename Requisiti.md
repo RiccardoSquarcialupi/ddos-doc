@@ -74,7 +74,7 @@ Di seguito sono descritti i requisiti non funzionali dell'applicativo:
 
 ll sistema sarà sviluppato in Scala 3 ed utilizza le seguenti librerie:
 
-* Akka, Akka-Actor-Typed, Akka-Cluster-Typed v2.7.0
+* Akka-Actor-Teskit-Typed, Akka-Serialization-Jackson Akka-Actor-Typed, Akka-Cluster-Typed v2.7.0
 * ScalaTest v3.2.14
 * TuSoW v0.8.3
 * ScalaFX v19
