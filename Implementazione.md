@@ -304,9 +304,9 @@ Gli unit test che ho sviluppato comprendono le classi:
 
 ## Riccardo Squarcialupi
 
-Durante lo sviluppo mi sono occupato inizialmente dei sensori, andando a definire quali sarebbero potuti essere i comportamenti dei sensori (insieme ai colleghi abbiamo maturato la soluzione finale e l'approccio da seguire per crearli), e che tipologie di messaggi avrebbero potuto ricevere/inviare (successivamente estese ed incapsulate all'interno di `DeviceProtocol`).
+Durante lo sviluppo mi sono occupato inizialmente dei sensori, andando a definire quali sarebbero potuti essere i comportamenti ed i vari tipi dei sensori (in particolare i 2 tipi base `BasicSensor`,`ProcessedDataSensor` e i moduli usabili tramite mixin `Condition` e `Timer` ) e che tipologie di messaggi avrebbero potuto ricevere/inviare (successivamente estese ed incapsulate all'interno di `DeviceProtocol`).
 In seguito ho contribuito allo sviluppo del modulo di deployment sviluppando il Singleton object `Deployer`, che permette di poter effettuare il deploy di un grafo di `Device` bilanciando il carico sui nodi presenti nel Cluster.
-Per concludere ho sviluppato all'interno del package storage il TusowBinder per poter eseguire la scrittura delle tuple nel Database ogni qualvolta un sensore o un gruppo di sensori invii il suo status.
+Per concludere ho sviluppato all'interno del package storage il TusowBinder per poter eseguire la scrittura di tuple mediante Prolog nel Database ogni qualvolta un sensore o un gruppo di sensori invii il suo status.
 Per concludere ho sviluppato tutta la gui per la demo.
 
 La lista delle classi che ho sviluppato sono:
