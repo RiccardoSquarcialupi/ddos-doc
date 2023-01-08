@@ -86,12 +86,12 @@ class ConditionalState[T](name: String, condFunction: ConditionalFunction[T]) ex
 L'utilizzo di valori `null` è altamente sconsigliata e porta con alta probabilità a scrivere codice buggato. Per gestire la *null safety*, Scala mette a disposizione gli `Option`, strutture per incapsulare oggetti che possono assumere valori `null` a run-time.
 
 ```scala
-protected var status: Option[T] = None  
-
-def propagate(selfId: ActorRef[Message], requester: ActorRef[Message]): Unit =  
-  if requester == selfId then status match  
-    case Some(value) => for (actor <- destinations) actor ! Status[T](selfId, value)  
-    case None =>
+  protected var status: Option[T] = None
+  
+  def propagate(selfId: ActorRef[DeviceMessage], requester: ActorRef[DeviceMessage]): Unit =
+    if requester == selfId then status match
+      case Some(value) => for (actor <- destinations) actor ! Status[T](selfId, value)
+      case None =>
 ```
 
 ## Mixins
@@ -99,19 +99,20 @@ def propagate(selfId: ActorRef[Message], requester: ActorRef[Message]): Unit =
 Utilizzando i mixins è possibile comporre classi senza utilizzare il meccanismo dell'ereditarietà.
 
 ```scala
-trait Condition[A, B](condition: (A | B) => Boolean, replyTo: ActorRef[Message]): 
+trait Condition[I: DataType, O: DataType](condition: O => Boolean, replyTo: ActorRef[DeviceMessage]):
 
-  self: Sensor[A, B] =>  
+  self: Sensor[I, O] =>
   
-  override def update(selfId: ActorRef[Message], physicalInput: B): Unit =  
-    self.status = Option(preProcess(physicalInput))  
-    condition(self.status.get) match  
-      case true => replyTo ! Status[A](selfId, self.status.get)  
-      case _ =>
+  override def update(selfId: ActorRef[SensorMessage], physicalInput: I): Unit =
+    self.status = Option(preProcess(physicalInput))
+    if condition(self.status.get) then replyTo ! Status[O](selfId, self.status.get)
 
 
 new Actuator[String]("actuatorTest", fsm) with Condition[String, String]
 ```
+
+## Type Class
+//TODO
 
 ## Partial functions
 
