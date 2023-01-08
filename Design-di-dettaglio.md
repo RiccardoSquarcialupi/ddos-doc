@@ -71,6 +71,7 @@ case class MapTag[I,O](
 ```
 
 ## Package: Device
+
 ### Attuatore
 
 ![Actuator UML](https://i.imgur.com/NHrWmrB.png)
@@ -92,7 +93,8 @@ Per un uniformare i messaggi scambiati fra i vari attori sia è creato il trait 
 
 ![Sensor UML](https://imgur.com/ewmQv6g.png)
 
-Le classi `BasicSensor` e  `ProcessedDataSensor`  sono un'implementazione del *trait* `Device` e mixin della definizione astratta del *trait* `Sensor`. Come tali possono essere istanziati con tutti i mixin disponibili per il *trait* `Device`, ad esempio `Timer` o `Public` oltre che al mixin `Condition` disponibile per il *trait* `Sensor`  . Possono essere quindi creati sensori per ogni possibile combinazione.
+Il sensore è definito in modo astratto dal *trait* `Sensor` ed è caratterizzato da due tipi di dato *DataType*: `I` rappresenta il tipo di dato che prende in input e `O` rappresenta il tipo di dato che restituisce in output. 
+Le classi `BasicSensor` e  `ProcessedDataSensor`  sono un'implementazione del *trait* `Device` e mixin della definizione astratta del *trait* `Sensor`. Come tali possono essere istanziati con tutti i mixin disponibili per il *trait* `Device`, ad esempio `Timer` e `Public`, oltre che al mixin `Condition` disponibile per il *trait* `Sensor`  . Possono essere quindi creati sensori per ogni possibile combinazione.
 ```scala
 new BasicSensor[Double]("1", List(testProbe.ref)) with Timer(interval)
 
@@ -101,7 +103,7 @@ new ProcessedDataSensor[String, Int]("1", List(testProbeProcessed.ref), x => x.t
 new BasicSensor[String]("1", List.empty) with Condition[String, String](_ contains "test", testProbe.ref) with Public[String] with Timer(interval)
 ```
 Come l'attuatore, il sensore è un `Device`, ed anch'esso maschera al suo interno il `Behavior` di un attore tipizzato di *Akka*.
-Per lo scambio di messaggi si utilizza il trait `Message` come già visto nell'attuatore precedentemente, ma vengono inoltre messi a disposizione dei messaggi  `case class Status[T](author: ActorRef[Message], value: T) extends Output[T](author, value)` per rappresentare l'invio dello stato del sensore, cioè il dato che sta misurando.
+Per lo scambio di messaggi si utilizza il trait `Message` come già visto nell'attuatore precedentemente, ma vengono inoltre messi a disposizione dei messaggi  `case class Status[T](author: ActorRef[_ <: Message], value: T) extends Output[T](author, value)` per rappresentare l'invio dello stato del sensore, cioè il dato che sta misurando.
 
 ## Package: Deployment
 
