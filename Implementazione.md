@@ -235,7 +235,7 @@ assert(readResponse == "[X = juliet]")
 
 ## Filippo Cavallari
 
-Durante lo sviluppo del primo modulo mi sono occupato dello sviluppo dell'attuatore (classe `Actuator`) e degli stati (`State`, `BasicState`, `CondState`, `TimedState`). In seguito ho contribuito allo sviluppo del modulo di deployment, implementando la struttura dati `Graph` e il metodo per deployare un grafo di dispositivi. Per concludere ho sviluppato l'intero modulo di storage, integrando TuSoW con Akka gRPC in modo che potesse essere utilizzato all'interno del framework; quest'ultimo sviluppo è quello che si è rivelato essere più complesso ma che a permesso di integrare la programmazione logica con quella funzionale.
+Durante lo sviluppo del primo modulo mi sono occupato della creazione dell'attuatore (classe `Actuator`) e degli stati (`State`, `BasicState`, `CondState`, `TimedState`). In seguito ho contribuito allo sviluppo del modulo di deployment, implementando la struttura dati `Graph` e il metodo per deployare un grafo di dispositivi. Per concludere ho sviluppato l'intero modulo di storage, integrando TuSoW con Akka gRPC in modo che potesse essere utilizzato all'interno del framework; quest'ultimo sviluppo è quello che si è rivelato essere il più complesso ma che alla fine ha permesso di integrare la programmazione logica con quella funzionale.
 Sebbene alcune classi non fossero di mia competenza, durante alcune situazioni critiche ho contribuito ad implementare alcune funzionalità ed a risolvere alcuni bug bloccanti.
 
 La lista finale delle classi che ho sviluppato in autonomia sono:

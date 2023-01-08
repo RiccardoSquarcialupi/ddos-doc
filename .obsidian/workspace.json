@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Implementazione.md",
+                "file": "Design-di-dettaglio.md",
                 "mode": "source",
                 "source": false
               }
@@ -85,7 +85,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Implementazione.md",
+                "file": "Design-di-dettaglio.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -102,7 +102,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Implementazione.md",
+                "file": "Design-di-dettaglio.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -125,7 +125,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Implementazione.md"
+                "file": "Design-di-dettaglio.md"
               }
             }
           }
@@ -146,17 +146,17 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "f5574a1d225c3dec",
+  "active": "cb9577f57466969f",
   "lastOpenFiles": [
-    "Design-di-dettaglio.md",
     "Implementazione.md",
-    "Design-architetturale.md",
-    "Untitled.canvas",
-    "Guida-utente.md",
-    "Sviluppi-futuri.md",
     "Requisiti.md",
-    "index.md",
-    "Introduzione.md",
-    "Processo-di-sviluppo.md"
+    "Processo-di-sviluppo.md",
+    "images/git-tree.png",
+    "images/epic.png",
+    "images/backlog.png",
+    "images/board.png",
+    "images/branches.png",
+    "Sviluppi-futuri.md",
+    "Design-di-dettaglio.md"
   ]
 }
