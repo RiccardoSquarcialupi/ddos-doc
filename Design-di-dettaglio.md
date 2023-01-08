@@ -1,4 +1,4 @@
-In questo capitolo verrà analizzata in maniera dettagliata la struttura del framework, andando a descrivere i singoli componenti e le relazioni fra di essi.
+In questo Capitolo verrà analizzata in maniera dettagliata la struttura del framework, andando a descrivere i singoli componenti e le relazioni fra di essi.
 
 ## Pattern utilizzati
 
@@ -180,7 +180,7 @@ Questo semplice trait mette a disposizione delle classi che lo utilizzano in mix
 
 Un `Tag` costituisce una configurazione per la generazione di una corrispettiva istanza di `Group` tramite il pattern factory durante il deployment.
 La creazione di un tag riduce la dipendenza temporale rispetto a quella di un `Group` perchè utilizza gli `ActorRef` di akka soltanto per definire il campo `destinations`. Campo che può essere modificato anche a runtime tramite l'invio di un messaggio di `Subscribe` da parte di un'eventuale nuova destinazione.
-Un istanza di `Tag` viene generata automaticamente in base ai valori passati alla funzione `apply()` del suo companion object, andando a costituire una specie di factory nella factory. I parametri sono:
+Un'istanza di `Tag` viene generata automaticamente in base ai valori passati alla funzione `apply()` del suo companion object, andando a costituire una specie di factory nella factory. I parametri sono:
 * La lista di id (di tipo stringa) dei dispositivi che costituiranno le sorgenti di dati del gruppo.
 * La lista di destinazioni iniziali (di tipo `ActorRef[Message]`) dello status computato dal gruppo.
 * La sola funzione f di mapping nel caso si voglia creare un `MapTag`.

@@ -1,6 +1,6 @@
 ### Requisiti di business
 
-L'obiettivo è quello di realizzare una libreria che faciliti l'utilizzo di qualunque tipologia di dispositivo IoT, nello specifico di sensori ed attuatori. La libreria metterà a disposizione un insieme di oggetti e di funzionalità che permetteranno all'utente di creare e gestire i propri dispositivi. In particolare, si darà la possibilità all'utente di:
+L'obiettivo è quello di realizzare una libreria che faciliti l'utilizzo di qualunque tipologia di dispositivo IoT, nello specifico di sensori ed attuatori. La libreria metterà a disposizione un insieme di oggetti e di funzionalità che permetteranno all'utente di creare e gestire i propri dispositivi. In particolare, l'utente avrà la possibilità di:
 
 * Creare sensori ed attuatori di ogni tipologia;
 * Creare gruppi virtuali di sensori;
@@ -13,12 +13,12 @@ Dopo che l'utente avrà definito i propri dispositivi e le proprie zone, potrà 
 
 Di seguito sono riportati i requisiti visti nell'ottica di cosa può fare l'utente:
 
-* l'utente potrà creare, modificare od estendere nuove tipologie di sensori a partire dalle implementazioni già fornite dal framework;
-* analogamento, l'utente potrà creare, modificare od estendere nuove tipologie di attuatori basandosi sulle implementazioni esistenti;
-* l'utente potrà definire la logica di funzionamento di un attuatore da lui creato;
-* l'utente potrà definire gruppi di dispositivi e la loro logica di funzionamento;
-* l'utente potrà salvare i dati rilevati e/o prodotti dai dispositivi;
-* l'utente potrà visualizzare il comportamento dei propri dispositivi mediante un'interfaccia grafica simulativa.
+* creare, modificare o estendere nuove tipologie di sensori a partire dalle implementazioni già fornite dal framework;
+* creare, modificare o estendere nuove tipologie di attuatori basandosi sulle implementazioni esistenti;
+* potrà definire la logica di funzionamento di un attuatore da lui creato;
+* potrà definire gruppi di dispositivi e la loro logica di funzionamento;
+* potrà salvare i dati rilevati e/o prodotti dai dispositivi;
+* potrà visualizzare il comportamento dei propri dispositivi mediante un'interfaccia grafica simulativa.
 
 ### Requisiti funzionali
 
