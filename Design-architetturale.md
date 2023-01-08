@@ -6,4 +6,4 @@ Le dipendenze fra moduli sono evidenziate dalle frecce direzionali; l'unico modu
 Il modulo **Deployment** fornisce funzioni per il deploy all'interno di cluster dei vari dispositivi, nascondendo completamente all'utente la complessa logica implementativa sottostante.  
 Il modulo **Grouping** contiene classi e funzioni per gestire le aggregazioni di dispositivi.  
 Il modulo **Storage**, invece, offre delle API per permettere la persistenza dei dati.  
-Per concludere, il modulo **GUI**, strutturato secondo il pattern MVC, permette di visualizzare graficamente lo status e la disposizione dei dispostivi all'interno del network.  
+Per concludere, il modulo **GUI**, strutturato secondo il pattern MVC, permette di visualizzare graficamente lo status e i dispostivi all'interno del network.  
