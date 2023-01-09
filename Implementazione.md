@@ -127,6 +127,9 @@ object GivenDataType:
 
   given DoubleDataType: DataType[Double] with
     override def defaultValue: Double = 0.0
+  
+  given BooleanDataType: DataType[Boolean] with
+    override def defaultValue: Boolean = false
 ...
 ```
 
