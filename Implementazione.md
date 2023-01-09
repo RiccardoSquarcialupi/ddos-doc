@@ -137,6 +137,22 @@ private def handleReadOrTakeRequest[A](in: ReadOrTakeRequest)(readOrTake: (Textu
     val space = textualSpaces(in.tupleSpaceID.getOrElse(TupleSpaceID("")).id)  
     handleFutureRequest(space)(() => Future.failed(new IllegalArgumentException("Tuple space not found")))(() => readOrTake(space, in.template.textualTemplate.get.regex, timeout))  
 }
+
+def basicBehavior[T](device: Device[T], ctx: ActorContext[DeviceMessage]): PartialFunction[DeviceMessage, Behavior[DeviceMessage]] =
+    case PropagateStatus(requesterRef: ActorRef[DeviceMessage]) =>
+        device.propagate(ctx.self, requesterRef) // requesterRef is the actor that request the propagation, not the destination.
+        Behaviors.same
+    case Subscribe(replyTo: ActorRef[DeviceMessage]) =>
+        device.subscribe(ctx.self, replyTo)
+        Behaviors.same
+    case Unsubscribe(replyTo: ActorRef[DeviceMessage]) =>
+        device.unsubscribe(ctx.self, replyTo)
+        Behaviors.same
+
+def timedBehavior[T](device: Device[T], ctx: ActorContext[DeviceMessage]): PartialFunction[DeviceMessage, Behavior[DeviceMessage]] =
+    case Tick =>
+        device.propagate(ctx.self, ctx.self)
+        Behaviors.same
 ```
 
 ## Generics
