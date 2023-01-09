@@ -311,8 +311,8 @@ Infine, ho collaborato all'implementazione dell'attore `TusowBinder` che utilizz
 
 Le classi progettate e implementate da me sono:
 * `Timer`
-* `BasicSensor` (metodo behavior e uso del mix-in)
-* `ProcessedDataSensor` (metodo behavior e uso del mix-in)
+* `BasicSensor`
+* `ProcessedDataSensor`
 * `SensorActor`
 * `DeviceBehavior` (usando le partial functions)
 * `Status`
