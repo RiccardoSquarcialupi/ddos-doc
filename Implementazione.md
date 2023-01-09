@@ -81,6 +81,16 @@ class ConditionalState[T](name: String, condFunction: ConditionalFunction[T]) ex
     }
 ```
 
+## Type bounds
+I Type bounds permettono di specificare i vincoli sui parametri di tipo e possono essere usati per migliorare la sicurezza dei tipi, la leggibilità e le prestazioni del codice. Infatti, oltre a poter facilitare la comprensione del codice da parte di altri programmatori, può anche aiutare il compilatore a generare codice più efficiente.
+
+### Upper type bounds 
+Gli Upper type bounds servono per specificare che un tipo deve essere un sottotipo di un altro tipo.
+
+```scala
+case class Subscribe[M <: Message](replyTo: ActorRef[M]) extends DeviceMessage
+```
+
 ## Options
 
 L'utilizzo di valori `null` è altamente sconsigliata e porta con alta probabilità a scrivere codice buggato. Per gestire la *null safety*, Scala mette a disposizione gli `Option`, strutture per incapsulare oggetti che possono assumere valori `null` a run-time.
