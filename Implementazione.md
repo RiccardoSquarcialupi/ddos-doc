@@ -267,6 +267,35 @@ Gli unit test che ho sviluppato comprendono le classi:
 * `ActuatorTest`
 * `TusowLogicHandlerTest`
 
+## Bruno Esposito
+
+Durante la prima fase di sviluppo del progetto ho collaborato alla definizione astratta di `Device` caratterizzata da `Sensor` e da `Actuator` - composto da una macchina a stati finiti -, ed alla implementazione dei moduli del device e del sensore. Successivamente, sempre nella prima fase di sviluppo, ho collaborato anche alla loro definizione concreta con `BasicSensor` e `ProcessedDataSensor` (usando il mix-in) e mi sono occupato della relativa implementazione ad attori.
+In seguito ho definito il protocollo `DeviceProtocol` per lo scambio di messaggi tra dispositivi (sensori e attuatori) in modo tale da poter distinguere i messaggi di sensori e di attuatori da quelli comuni ad entrambi. 
+Dopodiché sono passato allo sviluppo di `DataType`, definendo in particolare i tipi di dato che qualsiasi dispositivo avrebbe potuto gestire come input/output. Per farlo ho sfruttato le Type classes per ottenere un comportamento che può essere condiviso tra tipi diversi, senza usare l'ereditarietà o la sottotipizzazione, e in modo tale da - definendo una tale struttura del codice e potendo condividere il comportamento tra diversi tipi - avere un'implementazione della libreria estensibile e sicura (dal punto di vista del tipo) ed anche per avere codice più flessibile e facile da mantenere.
+Infine, ho collaborato all'implementazione dell'attore `TusowBinder` che utilizza l'integrazione di TuSoW con akka gRPC per memorizzare i dati rilevati dai dispositivi di un cluster.
+
+Le classi progettate e implementate da me sono:
+* `Timer`
+* `BasicSensor` (metodo behavior e uso del mix-in)
+* `ProcessedDataSensor` (metodo behavior e uso del mix-in)
+* `SensorActor`
+* `DeviceBehavior` (usando le partial functions)
+* `Status`
+* `PropagateStatus`
+* `UpdateStatus`
+* `DataType`
+* `GivenDataType`
+
+Le classi che ho contribuito a progettare sono:
+* `Device`
+* `Sensor`
+* `DeviceProtocol`
+* `TusowBinder`
+
+Gli unit test che ho sviluppato comprendono le classi:
+* `SensorTest`
+* `SensorMixinTest`
+
 ## Andrea Ingargiola
 
 Inizialmente mi sono occupato di mantenere una visione d'insieme nel design dei due componenti principali del modulo `Device`, partecipando alla progettazione sia dell'Attuatore (implementando la generica macchina a stati finiti) che del Sensore, e implementando direttamente il protocollo di comunicazione dell'astrazione `Device`, cioè il modulo `Public`.
