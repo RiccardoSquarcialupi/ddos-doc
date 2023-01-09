@@ -32,10 +32,10 @@ message match
         println(s"Force state change to ${transition}")  
         utilityActor = forceStateChange(context, transition)  
         Behaviors.same  
-    case Subscribe(requester: ActorRef[Message]) =>  
+    case Subscribe(requester: ActorRef[DeviceMessage]) =>  
         subscribe(context.self, requester)  
         Behaviors.same  
-    case PropagateStatus(requester: ActorRef[Message]) =>  
+    case PropagateStatus(requester: ActorRef[DeviceMessage]) =>  
         propagate(context.self, requester)  
         Behaviors.same
 ```
@@ -47,7 +47,7 @@ Le higher-order functions sono un costrutto che permette di utilizzare funzioni 
 ```scala
 class ConditionalState[T](name: String, condFunction: (T, Seq[T]) => Boolean) extends State[T](name):  
   
-    private val behavior: Behavior[Message] = Behaviors.receiveMessage[Message] { msg =>  
+    private val behavior: Behavior[DeviceMessage] = Behaviors.receiveMessage[DeviceMessage] { msg =>  
         msg match  
             case MessageWithReply(msg: T, replyTo, args: _*) =>  
                 if condFunction(msg, args.asInstanceOf[Seq[T]]) then  
@@ -69,7 +69,7 @@ type ConditionalFunction[T] = (T, Seq[T]) => Boolean
 
 class ConditionalState[T](name: String, condFunction: ConditionalFunction[T]) extends State[T](name):  
   
-    private val behavior: Behavior[Message] = Behaviors.receiveMessage[Message] { msg =>  
+    private val behavior: Behavior[DeviceMessage] = Behaviors.receiveMessage[DeviceMessage] { msg =>  
         msg match  
             case MessageWithReply(msg: T, replyTo, args: _*) =>  
                 if condFunction(msg, args.asInstanceOf[Seq[T]]) then  
