@@ -321,6 +321,7 @@ Infine, ho collaborato all'implementazione dell'attore `TusowBinder` che utilizz
 
 Le classi progettate e implementate da me sono:
 * `Timer`
+* `Condition`
 * `BasicSensor`
 * `ProcessedDataSensor`
 * `SensorActor`
