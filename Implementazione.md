@@ -111,8 +111,24 @@ trait Condition[I: DataType, O: DataType](condition: O => Boolean, replyTo: Acto
 new Actuator[String]("actuatorTest", fsm) with Condition[String, String]
 ```
 
-## Type Class
-//TODO
+## Type classes
+Le Type classes permettono di definire comportamenti - sotto forma di metodi - che possono essere "aggiunti" ai tipi esistenti, senza modificare il codice sorgente di tali tipi.
+
+```scala
+trait DataType[T]:
+  def defaultValue: T
+
+object DataType:
+  def defaultValue[T](using data: DataType[T]): T = data.defaultValue
+
+object GivenDataType:
+  given IntDataType: DataType[Int] with
+    override def defaultValue: Int = 0
+
+  given DoubleDataType: DataType[Double] with
+    override def defaultValue: Double = 0.0
+...
+```
 
 ## Partial functions
 
