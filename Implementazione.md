@@ -314,10 +314,11 @@ Le classi progettate e implementate da me sono:
 * `BasicSensor`
 * `ProcessedDataSensor`
 * `SensorActor`
-* `DeviceBehavior` (usando le partial functions)
+* `DeviceBehavior`
 * `Status`
 * `PropagateStatus`
 * `UpdateStatus`
+* `MessageWithReply`
 * `DataType`
 * `GivenDataType`
 
